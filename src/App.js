@@ -28,8 +28,8 @@ function App({ theme }) {
     interceptor ?
       <React.Fragment >
         <Helmet
-          titleTemplate="%s | Material App"
-          defaultTitle="Material App - React Admin & Dashboard Template"
+          titleTemplate="%s | Cover Compared"
+          defaultTitle="Cover Compared"
         />
         <StylesProvider injectFirst>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
