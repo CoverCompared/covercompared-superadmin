@@ -6,3 +6,12 @@
     width: auto;
     margin-right: 10px;
 }
+.forgot-password-link{
+    float: right;
+    margin-bottom: 12px;
+}
+
+.back-to-login-link{
+    text-align: center;
+    margin-top: 12px;
+}

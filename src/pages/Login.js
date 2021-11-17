@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import _ from "lodash";
-import { Button, FormControl, IconButton, Input, InputAdornment, InputLabel, Paper, TextField, Typography } from "@material-ui/core";
+import { Button, IconButton, InputAdornment, Paper, TextField, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
@@ -8,6 +7,7 @@ import validator from "./../libs/validator";
 import utils from "../libs/utils";
 import AuthService from "./../libs/services/auth";
 import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
 
 const Wrapper = styled(Paper)`
   padding: ${props => props.theme.spacing(6)}px;
@@ -110,6 +110,8 @@ function Login(props) {
             ),
           }}
         />
+
+        <Link className="forgot-password-link" to={{ pathname: "/forgot-password" }}>Forgot Password</Link>
 
         <Button
           fullWidth

@@ -185,7 +185,7 @@ function Private() {
   );
 }
 
-function Settings() {
+function PageSettings() {
   return (
     <React.Fragment>
       <Helmet title="Settings" />
@@ -216,4 +216,4 @@ function Settings() {
   );
 }
 
-export default Settings;
+export default PageSettings;

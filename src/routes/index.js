@@ -17,10 +17,13 @@ import {
   PieChart,
   Sliders,
   User,
-  Users
+  Users,
+  Settings as SettingsIcon
 } from "react-feather";
 
 const HomePage = async(() => import("../pages/HomePage"));
+const Settings = async(() => import("../pages/Settings"));
+const ForgotPassword = async(() => import("../pages/ForgotPassword"));
 
 // Auth components
 const SignIn = async(() => import("../pages/auth/SignIn"));
@@ -63,7 +66,7 @@ const Blank = async(() => import("../pages/pages/Blank"));
 const Invoice = async(() => import("../pages/pages/Invoice"));
 const Pricing = async(() => import("../pages/pages/Pricing"));
 const Profile = async(() => import("../pages/pages/Profile"));
-const Settings = async(() => import("../pages/pages/Settings"));
+const PageSettings = async(() => import("../pages/pages/Settings"));
 const Tasks = async(() => import("../pages/pages/Tasks"));
 const Projects = async(() => import("../pages/pages/Projects"));
 const Calendar = async(() => import("../pages/pages/Calendar"));
@@ -96,7 +99,7 @@ const pagesRoutes = {
     {
       path: "/pages/settings",
       name: "Settings",
-      component: Settings
+      component: PageSettings
     },
     {
       path: "/pages/pricing",
@@ -360,8 +363,24 @@ const loginRoute = {
   children: null
 }
 
+const settingsRoute = {
+  id: "Settings",
+  path: "/settings",
+  icon: <SettingsIcon />,
+  component: Settings,
+  children: null
+}
+
+const forgotPasswordRoute = {
+  id: "ForgotPassword",
+  path: "/forgot-password",
+  component: ForgotPassword,
+  children: null
+}
+
 export const dashboard = [
   dashboardsRoutes,
+  settingsRoute,
   pagesRoutes,
   profileRoutes,
   projectsRoutes,
@@ -379,6 +398,6 @@ export const dashboard = [
 
 export const auth = [authRoutes];
 
-export const unAuthRoutes = [loginRoute];
+export const unAuthRoutes = [loginRoute, forgotPasswordRoute,];
 
-export default [dashboardsRoutes];
+export default [dashboardsRoutes, settingsRoute];
