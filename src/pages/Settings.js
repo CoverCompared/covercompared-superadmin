@@ -6,8 +6,11 @@ import { withTheme } from "styled-components";
 import utils from "../libs/utils";
 import validator from "./../libs/validator";
 import AuthService from "./../libs/services/auth";
+import { useSnackbar } from "notistack";
 
 function ChangePassword(props) {
+
+    const { enqueueSnackbar } = useSnackbar();
 
     const [passwordVisibility, setPasswordVisibility] = useState({
         old_password: false,
@@ -77,10 +80,7 @@ function ChangePassword(props) {
              * TODO: Stop loader
              */
             if (response.status) {
-                /**
-                 * TODO: Toast Message : Password changed successfully
-                 */
-
+                 enqueueSnackbar("Password changed successfully.", { variant: "success", autoHideDuration: '3s' });
                 let _form = { ...form };
                 _form.old_password.value = "";
                 _form.new_password.value = "";
@@ -123,6 +123,8 @@ function ChangePassword(props) {
 
 function UpdateEmail(props) {
 
+    const { enqueueSnackbar } = useSnackbar();
+
     const [passwordVisibility, setPasswordVisibility] = useState(false);
 
     const [form, setForm] = useState({
@@ -159,7 +161,7 @@ function UpdateEmail(props) {
     }, []);
 
     const updateEmail = async () => {
-        
+
         setForm(utils.formTouchAllField({ ...form }));
 
         /**
@@ -171,10 +173,7 @@ function UpdateEmail(props) {
              * TODO: Stop loader
              */
             if (response.status) {
-                /**
-                 * TODO: Toast Message : Email changed successfully
-                 */
-
+                enqueueSnackbar("Email changed successfully.", { variant: "success", autoHideDuration: '3s' });
                 let _form = { ...form };
                 _form.email.value = AuthService.getEmail();
                 _form.password.value = "";

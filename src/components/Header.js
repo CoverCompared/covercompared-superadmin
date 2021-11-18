@@ -25,6 +25,7 @@ import {
 } from "react-feather";
 import { setProfile } from "../redux/actions/themeActions";
 import AuthService from "./../libs/services/auth";
+import { useSnackbar, withSnackbar } from "notistack";
 
 const AppBar = styled(MuiAppBar)`
   background: ${props => props.theme.header.background};
@@ -178,18 +179,20 @@ class UserMenu extends Component {
   };
 
   logout = async () => {
+
     /**
      * TODO: Start loader
      */
 
     // Remove Token
     localStorage.removeItem("token");
-    
+
     await AuthService.logout();
-    
+
     /**
-     * TODO: Toast Message "Logout successfully." & Stop loader
+     * TODO: Stop loader
      */
+     this.props.enqueueSnackbar("Logout successfully.", { variant: "success", autoHideDuration: '3s' });
 
     // Remove Profile Object from redux
     this.props.dispatch(setProfile(false))
@@ -223,7 +226,7 @@ class UserMenu extends Component {
             Profile
           </MenuItem> */}
           <MenuItem
-            onClick={() => { 
+            onClick={() => {
               this.logout();
             }}
           >
@@ -234,7 +237,7 @@ class UserMenu extends Component {
     );
   }
 }
-UserMenu = connect()(UserMenu);
+UserMenu = connect()(withSnackbar(UserMenu) );
 
 const Header = ({ onDrawerToggle, theme }) => (
   <React.Fragment>

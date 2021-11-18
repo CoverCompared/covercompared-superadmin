@@ -15,3 +15,15 @@
     text-align: center;
     margin-top: 12px;
 }
+.circle-loader{
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 99999999;
+    top: 0;
+    display: flex;
+}
+.circle-loader .MuiCircularProgress-root{
+    align-self: center;
+    margin-left: 50%;
+}

@@ -41,6 +41,7 @@
     "jss": "10.0.4",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "notistack": "^1.0.10",
     "polished": "3.4.4",
     "prop-types": "15.7.2",
     "react": "16.13.0",

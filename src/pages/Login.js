@@ -8,6 +8,9 @@ import utils from "../libs/utils";
 import AuthService from "./../libs/services/auth";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
+import { useSnackbar, withSnackbar } from "notistack";
+import { setLoader } from "../redux/actions/themeActions";
+import { connect } from "react-redux";
 
 const Wrapper = styled(Paper)`
   padding: ${props => props.theme.spacing(6)}px;
@@ -20,6 +23,7 @@ const Wrapper = styled(Paper)`
 function Login(props) {
 
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const [form, setForm] = useState({
     email: { value: "", rules: ["required"] },
@@ -48,7 +52,9 @@ function Login(props) {
     setValidateMessage(messages);
   }
 
-  useEffect(() => { submitMessage() }, [])
+  useEffect(() => {
+    submitMessage();
+  }, [])
 
   const submitForm = async () => {
     setForm(utils.formTouchAllField({ ...form }));
@@ -61,15 +67,22 @@ function Login(props) {
       let data = await AuthService.login(form.email.value, form.password.value);
       if (data.status) {
         /**
-         * TODO: Stop loader & Toast Message "Login successfully."
+         * TODO: Stop loader
          */
         props.history.push(`${process.env.PUBLIC_URL}/`);
+        enqueueSnackbar(data.message, { variant: "success", autoHideDuration: '3s' });
       } else {
+        /**
+         * TODO: Stop loader
+         */
         setValidateMessage({ email: data.message, password: "" });
       }
     }
     catch (e) {
-      console.log("Error", e);
+      /**
+       * TODO: Stop loader
+       */
+       enqueueSnackbar("Something went wrong.", { variant: "error", autoHideDuration: '3s' });
     }
   }
 
@@ -128,4 +141,4 @@ function Login(props) {
   );
 }
 
-export default withRouter(Login);
+export default connect()(withRouter(Login));

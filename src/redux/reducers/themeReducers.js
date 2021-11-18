@@ -14,6 +14,13 @@ export default function reducer(state={ currentTheme: 0, profile : false }, acti
         ...state,
         profile: actions.payload
       }
+    
+    case types.SET_LOADER:
+      return {
+        ...state,
+        loader: actions.payload
+      }
+    
 
     default:
       return state

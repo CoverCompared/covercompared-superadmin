@@ -14,6 +14,7 @@ import { ThemeProvider } from "styled-components";
 import maTheme from "./theme";
 import Routes from "./routes/Routes";
 import AxiosInterceptor from "./libs/services/interceptor";
+import { CircularProgress } from "@material-ui/core";
 
 function App({ theme }) {
   const [interceptor, setInterceptor] = useState(0);
@@ -40,6 +41,13 @@ function App({ theme }) {
             </MuiThemeProvider>
           </MuiPickersUtilsProvider>
         </StylesProvider>
+        {
+          theme.loader &&
+          <div className="circle-loader">
+            <CircularProgress color="primary" />
+          </div>
+        }
+
       </React.Fragment>
       : <></>
   );
