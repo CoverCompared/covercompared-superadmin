@@ -7,6 +7,7 @@ import utils from "../libs/utils";
 import validator from "./../libs/validator";
 import AuthService from "./../libs/services/auth";
 import { useSnackbar } from "notistack";
+import { Route, Switch, useRouteMatch } from "react-router";
 
 function ChangePassword(props) {
 
@@ -80,7 +81,7 @@ function ChangePassword(props) {
              * TODO: Stop loader
              */
             if (response.status) {
-                 enqueueSnackbar("Password changed successfully.", { variant: "success", autoHideDuration: '3s' });
+                enqueueSnackbar("Password changed successfully.", { variant: "success", autoHideDuration: '3s' });
                 let _form = { ...form };
                 _form.old_password.value = "";
                 _form.new_password.value = "";
@@ -237,6 +238,8 @@ function UpdateEmail(props) {
 }
 
 function Settings(props) {
+    let { path, url } = useRouteMatch();
+
     return <React.Fragment>
         <Helmet title="Settings" />
         <Grid justify="space-between" container spacing={6}>
@@ -253,7 +256,7 @@ function Settings(props) {
             <Grid item xs={12} md={6}> <ChangePassword /> </Grid>
             <Grid item xs={12} md={6}> <UpdateEmail /> </Grid>
         </Grid>
-
+        
     </React.Fragment>
 }
 

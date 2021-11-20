@@ -20,10 +20,15 @@ import {
   Users,
   Settings as SettingsIcon
 } from "react-feather";
+import { ContactMail, VerticalSplit } from "@material-ui/icons";
 
 const HomePage = async(() => import("../pages/HomePage"));
 const Settings = async(() => import("../pages/Settings"));
 const ForgotPassword = async(() => import("../pages/ForgotPassword"));
+const ContactUsList = async(() => import("../pages/ContactUs/ContactUsList"));
+const BlogsList = async(() => import("../pages/Blogs/BlogList"));
+const BlogShow = async(() => import("../pages/Blogs/BlogShow"));
+const BlogCreate = async(() => import("../pages/Blogs/BlogCreate"));
 
 // Auth components
 const SignIn = async(() => import("../pages/auth/SignIn"));
@@ -89,6 +94,38 @@ const dashboardsRoutes = {
   icon: <Sliders />,
   containsHome: true,
   component: HomePage
+};
+
+const contactUsRoutes = {
+  id: "Contact Us",
+  path: "/contact-us",
+  exactMatch: false,
+  icon: <ContactMail />,
+  component: ContactUsList
+};
+
+const blogsRoutes = {
+  id: "Blogs",
+  path: "/blogs",
+  exactMatch: false,
+  icon: <VerticalSplit />,
+  component: BlogsList
+};
+
+const blogShowRoutes = {
+  id: "Blogs",
+  path: "/blogs/show/:id",
+  exactMatch: false,
+  icon: <VerticalSplit />,
+  component: BlogShow
+};
+
+const blogCreateRoutes = {
+  id: "Blogs",
+  path: "/blogs/create",
+  exactMatch: false,
+  icon: <VerticalSplit />,
+  component: BlogCreate
 };
 
 const pagesRoutes = {
@@ -366,6 +403,7 @@ const loginRoute = {
 const settingsRoute = {
   id: "Settings",
   path: "/settings",
+  exactMatch : false,
   icon: <SettingsIcon />,
   component: Settings,
   children: null
@@ -381,6 +419,10 @@ const forgotPasswordRoute = {
 export const dashboard = [
   dashboardsRoutes,
   settingsRoute,
+  contactUsRoutes,
+  blogsRoutes,
+  blogShowRoutes,
+  blogCreateRoutes,
   pagesRoutes,
   profileRoutes,
   projectsRoutes,
@@ -400,4 +442,4 @@ export const auth = [authRoutes];
 
 export const unAuthRoutes = [loginRoute, forgotPasswordRoute,];
 
-export default [dashboardsRoutes, settingsRoute];
+export default [dashboardsRoutes, contactUsRoutes, blogsRoutes, settingsRoute];

@@ -301,7 +301,6 @@ class Sidebar extends React.Component {
   UNSAFE_componentWillMount() {
     /* Open collapse element that matches current url */
     const pathName = this.props.location.pathname;
-
     routes.forEach((route, index) => {
       const isActive = pathName.indexOf(route.path) === 0;
       const isOpen = route.open;
@@ -366,7 +365,7 @@ class Sidebar extends React.Component {
                       activeClassName="active"
                       component={NavLink}
                       icon={category.icon}
-                      exact
+                      exact={category.exactMatch !== false}
                       badge={category.badge}
                     />
                   )}
