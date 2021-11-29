@@ -69,7 +69,7 @@ function Login(props) {
         /**
          * TODO: Stop loader
          */
-        props.history.push(`${process.env.PUBLIC_URL}/`);
+        props.history.push(`/`);
         enqueueSnackbar(data.message, { variant: "success", autoHideDuration: '3s' });
       } else {
         /**

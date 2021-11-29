@@ -166,7 +166,7 @@ class BasicTable extends React.Component {
                                         <TableCell className="text-capitalize">{cover.payment_status}</TableCell>
                                         <TableCell className="text-right">{cover.total_amount} {cover.currency}</TableCell>
                                         <TableCell className="text-right">
-                                            <Link to={`${process.env.PUBLIC_URL}/covers/show/${cover._id}`}> 
+                                            <Link to={`/covers/show/${cover._id}`}> 
                                                 <IconButton> <Visibility /> </IconButton>
                                             </Link>
                                         </TableCell>
