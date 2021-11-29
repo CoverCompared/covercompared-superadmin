@@ -20,7 +20,7 @@ import {
   Users,
   Settings as SettingsIcon
 } from "react-feather";
-import { ContactMail, VerticalSplit } from "@material-ui/icons";
+import { ContactMail, DescriptionOutlined, VerticalSplit } from "@material-ui/icons";
 
 const HomePage = async(() => import("../pages/HomePage"));
 const Settings = async(() => import("../pages/Settings"));
@@ -29,6 +29,8 @@ const ContactUsList = async(() => import("../pages/ContactUs/ContactUsList"));
 const BlogsList = async(() => import("../pages/Blogs/BlogList"));
 const BlogShow = async(() => import("../pages/Blogs/BlogShow"));
 const BlogCreate = async(() => import("../pages/Blogs/BlogCreate"));
+const CoverList = async(() => import("../pages/Covers/CoverList"));
+const CoverShow = async(() => import("../pages/Covers/CoverShow"));
 
 // Auth components
 const SignIn = async(() => import("../pages/auth/SignIn"));
@@ -118,6 +120,22 @@ const blogShowRoutes = {
   exactMatch: false,
   icon: <VerticalSplit />,
   component: BlogShow
+};
+
+const coversRoutes = {
+  id: "Covers",
+  path: "/covers",
+  exactMatch: false,
+  icon: <DescriptionOutlined />,
+  component: CoverList
+};
+
+const coverShowRoutes = {
+  id: "Covers",
+  path: "/covers/show/:id",
+  exactMatch: false,
+  icon: <DescriptionOutlined />,
+  component: CoverShow
 };
 
 const blogCreateRoutes = {
@@ -403,7 +421,7 @@ const loginRoute = {
 const settingsRoute = {
   id: "Settings",
   path: "/settings",
-  exactMatch : false,
+  exactMatch: false,
   icon: <SettingsIcon />,
   component: Settings,
   children: null
@@ -423,6 +441,8 @@ export const dashboard = [
   blogsRoutes,
   blogShowRoutes,
   blogCreateRoutes,
+  coversRoutes,
+  coverShowRoutes,
   pagesRoutes,
   profileRoutes,
   projectsRoutes,
@@ -442,4 +462,10 @@ export const auth = [authRoutes];
 
 export const unAuthRoutes = [loginRoute, forgotPasswordRoute,];
 
-export default [dashboardsRoutes, contactUsRoutes, blogsRoutes, settingsRoute];
+export default [
+  dashboardsRoutes,
+  coversRoutes,
+  // contactUsRoutes,
+  // blogsRoutes,
+  settingsRoute
+];

@@ -3,9 +3,18 @@ import _ from "lodash";
 
 const utils = {};
 
-utils.getFormatedDate = (timestamp) => {
+utils.getFormattedDate = (timestamp) => {
     try {
         let time = moment(timestamp).format('LL')
+        return time;
+    } catch (error) {
+        return "-";
+    }
+}
+
+utils.getFormattedDateTime = (timestamp) => {
+    try {
+        let time = moment(timestamp).format('LLL')
         return time;
     } catch (error) {
         return "-";
