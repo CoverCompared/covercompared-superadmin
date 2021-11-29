@@ -7,6 +7,6 @@ RUN yarn build
 
 
 FROM nginx:stable-alpine
-COPY --from=0 /usr/src/app/build /usr/share/nginx/html
+COPY --from=0 /usr/src/app/build /usr/share/nginx/html/superadmin
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
