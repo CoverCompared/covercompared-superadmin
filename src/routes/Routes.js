@@ -32,7 +32,7 @@ const childRoutes = (Layout, routes, GuardComponent) =>
   );
 
 const Routes = () => (
-  <Router>
+  <Router basename={process.env.PUBLIC_URL}>
     <Switch>
       {childRoutes(DashboardLayout, dashboardRoutes, AuthGuard)}
       {childRoutes(AuthLayout, authRoutes, AuthGuard)}

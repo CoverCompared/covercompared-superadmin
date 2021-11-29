@@ -16,7 +16,7 @@ export default () => {
         if (status === 401) {
             console.log("Dispatch Profile");
             // store.
-            // window.location.href = `${process.env.PUBLIC_URL}/login`;
+            // window.location.href = `/login`;
         }
         return Promise.reject(error);
     })

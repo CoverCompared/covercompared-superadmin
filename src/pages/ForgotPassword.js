@@ -59,7 +59,7 @@ function ForgotPassword(props) {
                 /**
                  * TODO: Stop loader & Toast Message "Reset mail successfully."
                  */
-                props.history.push(`${process.env.PUBLIC_URL}/login`);
+                props.history.push(`/login`);
             } else {
                 setValidateMessage({ email: data.message });
             }

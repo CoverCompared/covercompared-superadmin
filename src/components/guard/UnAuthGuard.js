@@ -19,13 +19,13 @@ class UnAuthGuard extends React.Component{
                     status = true;
                     localStorage.removeItem("token")
                 } else {
-                    this.props.history.push(`${process.env.PUBLIC_URL}/`);
+                    this.props.history.push(`/`);
                 }
                 this.setState({ status: true }, () => {
                     this.props.dispatch(setProfile(user))
                 });
             } catch (error) {
-                this.props.history.push(`${process.env.PUBLIC_URL}/`);
+                this.props.history.push(`/`);
             }
         } else {
             this.setState({ status: true });
