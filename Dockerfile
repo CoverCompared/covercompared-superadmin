@@ -5,6 +5,7 @@ COPY . .
 RUN yarn
 RUN yarn build
 
+
 FROM nginx:stable-alpine
 COPY --from=0 /usr/src/app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
