@@ -466,6 +466,6 @@ export default [
   dashboardsRoutes,
   coversRoutes,
   // contactUsRoutes,
-  // blogsRoutes,
+  blogsRoutes,
   settingsRoute
 ];

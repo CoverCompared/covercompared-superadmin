@@ -19,13 +19,11 @@ BlogService.table = async ({ from, to, order_field, order_by, q }) => {
     return res;
 }
 
-BlogService.add = async (bodyFormData ,config) => {
-    console.log(bodyFormData);
+BlogService.add = async (data) => {
     return axios({
         url: `${API_BASE_URL}/admin/blogs`,
-        method: "POST",
-        data:bodyFormData,
-        config
+        method: "POST", data,
+        headers: { 'content-type': 'multipart/form-data' }
     })
 }
 export default BlogService;

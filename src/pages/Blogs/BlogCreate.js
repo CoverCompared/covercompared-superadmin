@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { withTheme } from "styled-components";
-import { Button, IconButton, InputAdornment, Paper, TextField } from "@material-ui/core";
+import { Card, CardContent, Button, IconButton, InputAdornment, Paper, TextField } from "@material-ui/core";
 import Helmet from 'react-helmet';
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { InsertPhoto } from "@material-ui/icons";
 import validator from "../../libs/validator";
 import utils from "../../libs/utils";
 import 'react-quill/dist/quill.snow.css';
 import BlogService from "../../libs/services/blogs";
 import { useSnackbar, withSnackbar } from "notistack";
-
+import { withRouter } from "react-router";
 
 import {
   Grid,
@@ -26,16 +26,16 @@ const Divider = styled(MuiDivider)(spacing);
 
 const Typography = styled(MuiTypography)(spacing);
 
-function BlogCreate({ theme }, props) {
+function BlogCreate({ theme, history }, props) {
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const [imageDataUrl, setImageDataUrl] = useState(undefined);
+  const fileInput = useRef(null);
   const [form, setForm] = useState({
     title: { value: "", rules: ["required"] },
-    status: { value: "", rules: ["required"] },
     description: { value: "", rules: ["required"] },
     content: { value: "", rules: [] },
-    image: { value: "", rules: ["required"] }
+    image: { value: "", rules: [] }
   });
 
   const [validateMessage, setValidateMessage] = useState({});
@@ -60,6 +60,22 @@ function BlogCreate({ theme }, props) {
     setValidateMessage(messages);
   }
 
+  const setImageFiles = (files) => {
+    if (files && files.length) {
+      const image = files[0];
+      let fileReader = new FileReader();
+      fileReader.readAsDataURL(image);
+      fileReader.onload = () => {
+        setImageDataUrl(fileReader.result);
+        let _form = { ...form };
+        _form['image'].value = image;
+        setForm(_form);
+      }
+    } else {
+      setImageDataUrl(undefined);
+    }
+  }
+
   useEffect(() => {
     submitMessage();
   }, [])
@@ -68,37 +84,29 @@ function BlogCreate({ theme }, props) {
     setForm(utils.formTouchAllField({ ...form }));
     var axios = require('axios');
     var FormData = require('form-data');
-    var fs = require('fs');
-    
 
     let bodyFormData = new FormData();
     bodyFormData.append('title', form.title.value);
-    bodyFormData.append('status', form.status.value);
+    bodyFormData.append('status', "draft");
     bodyFormData.append('description', form.description.value);
     bodyFormData.append('content', form.content.value);
-    // bodyFormData.append('image', form.image.value);
-    bodyFormData.append('image', fs.createReadStream(form.image.value));
+    bodyFormData.append('image', form.image.value);
 
-    const config = {     
-      headers: { 'content-type': 'multipart/form-data' }
-    }
-    console.log(bodyFormData);
     try {
-      
-      let data = await BlogService.add(bodyFormData,config);
-      
 
-      if (data.status) {
+      let response = await BlogService.add(bodyFormData);
+      if (response.data.success) {
         /**
          * TODO: Stop loader
          */
-        props.history.push(`/`);
-        enqueueSnackbar(data.message, { variant: "success", autoHideDuration: '3s' });
+        enqueueSnackbar(response.data.message, { variant: "success", autoHideDuration: '3s' });
+        history.push(`/blogs/show/${response.data.data._id}`)
       } else {
         /**
          * TODO: Stop loader
          */
-        setValidateMessage({ email: data.message, password: "" });
+        let message = response.data.data.image ? response.data.data.image.message : "Something went wrong.";
+        enqueueSnackbar(message, { variant: "error", autoHideDuration: '3s' });
       }
     }
     catch (e) {
@@ -133,83 +141,66 @@ function BlogCreate({ theme }, props) {
       </Breadcrumbs>
 
       <Divider my={6} />
-      <form>
+      <Card>
+        <CardContent>
+          <form>
+            <TextField variant="standard" margin="normal" fullWidth
+              label="Title"
+              name="title"
+              value={form.title.value} onChange={handleChange}
+              onBlur={onBlur}
+              error={form.title.isTouched === true && validateMessage.title !== undefined}
+              helperText={form.title.isTouched === true ? validateMessage.title : ""}
+            />
+
+            <TextField variant="standard" margin="normal" fullWidth
+              label="Description"
+              name="description"
+              value={form.description.value} onChange={handleChange}
+              onBlur={onBlur}
+              error={form.description.isTouched === true && validateMessage.description !== undefined}
+              helperText={form.description.isTouched === true ? validateMessage.description : ""}
+            />
+
+            <Typography variant="body2" className="mt-2"> Image </Typography>
+            <div
+              onDrop={(event) => { event.preventDefault(); setImageFiles(event.dataTransfer.files) }}
+              onDragEnter={(event) => { event.preventDefault() }}
+              onDragLeave={(event) => { event.preventDefault() }}
+              onDragOver={(event) => { event.preventDefault() }}
+              onClick={(event) => { fileInput.current.click() }}
+              className="drop-image-container">
+              <InsertPhoto /> &nbsp;
+              Drop a image to upload, or click to select it.
+              <input type="file" ref={fileInput} onChange={(event) => { setImageFiles(event.target.files) }} accept=".jpg,.jpeg,.png" hidden />
+            </div>
+
+            {imageDataUrl && <img src={imageDataUrl} className="blog-upload-image-preview" />}
+
+            <ReactQuill
+              name="content"
+              theme="snow"
+              value={form.content.value}
+              onChange={handleChangeReachTextEditor}
+              onBlur={(e) => { onBlur({ target: { name: "content" } }) }}
+            />
 
 
-
-        <TextField variant="standard" margin="normal" fullWidth
-          label="Title"
-          name="title"
-          value={form.title.value} onChange={handleChange}
-          onBlur={onBlur}
-          error={form.title.isTouched === true && validateMessage.title !== undefined}
-          helperText={form.title.isTouched === true ? validateMessage.title : ""}
-        />
-
-        <TextField variant="standard" margin="normal" fullWidth
-          label="Status"
-          name="status"
-          value={form.status.value} onChange={handleChange}
-          onBlur={onBlur}
-          error={form.status.isTouched === true && validateMessage.status !== undefined}
-          helperText={form.status.isTouched === true ? validateMessage.status : ""}
-        />
-
-        <TextField variant="standard" margin="normal" fullWidth
-          label="description"
-          name="description"
-          value={form.description.value} onChange={handleChange}
-          onBlur={onBlur}
-          error={form.description.isTouched === true && validateMessage.description !== undefined}
-          helperText={form.description.isTouched === true ? validateMessage.description : ""}
-        />
-
-        {/* <TextField variant="standard" margin="normal" fullWidth
-          label="content"
-          name="content"
-          value={form.content.value} onChange={handleChange}
-          onBlur={onBlur}
-          error={form.content.isTouched === true && validateMessage.content !== undefined}
-          helperText={form.content.isTouched === true ? validateMessage.content : ""}
-        /> */}
-
-        <ReactQuill
-          name="content"
-          theme="snow"
-          value={form.content.value}
-          onChange={handleChangeReachTextEditor}
-          onBlur={(e) => { onBlur({ target: { name: "content" } }) }}
-        />
-
-        <Button
-          mb={2}
-          variant="contained"
-          component="label"
-          type="file"
-          name="image"
-        >
-          Upload File
-          <input
-            type="file"
-            name="image"
-            value={form.image.value}
-            hidden
-          />
-        </Button>
-
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          mb={2}
-          // disabled={Boolean(Object.keys(validateMessage).length)}
-          onClick={submitForm}
-        >
-          Add
-        </Button>
-      </form>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              mb={2}
+              disabled={Boolean(Object.keys(validateMessage).length)}
+              onClick={submitForm}
+            >
+              Add
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </React.Fragment>
   );
 }
 
-export default withTheme(BlogCreate);
+export default withRouter(withTheme(BlogCreate));

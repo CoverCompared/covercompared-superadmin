@@ -34,3 +34,18 @@
 .float-right{
     float: right !important;
 }
+.drop-image-container{
+    width: 100%;
+    background-color: whitesmoke;
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.blog-upload-image-preview{
+    max-height: 150px;
+    width: auto;
+    margin: 15px 0;
+}
