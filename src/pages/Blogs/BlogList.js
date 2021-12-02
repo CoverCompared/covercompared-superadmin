@@ -9,13 +9,14 @@ import {
     Divider as MuiDivider,
     Typography as MuiTypography,
     Button,
-    Breadcrumbs, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody, TablePagination
+    Breadcrumbs, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody, TablePagination, IconButton
 } from "@material-ui/core";
 
 import { spacing } from "@material-ui/system";
 import { Link } from "react-router-dom";
 import BlogService from "../../libs/services/blogs";
 import utils from "../../libs/utils";
+import { Visibility } from "@material-ui/icons";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -51,7 +52,6 @@ class BasicTable extends React.Component {
             if (response.data.success) {
                 this.setState(utils.convertPaginationResponse(response))
             }
-
         } catch (error) {
             /**
              * TODO: Stop Loader
@@ -77,6 +77,7 @@ class BasicTable extends React.Component {
                                 <TableCell>Title</TableCell>
                                 <TableCell align="right">Status</TableCell>
                                 <TableCell align="right">Created Date</TableCell>
+                                <TableCell className="text-right">View</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -87,6 +88,11 @@ class BasicTable extends React.Component {
                                     </TableCell>
                                     <TableCell align="right">{blog.status}</TableCell>
                                     <TableCell align="right">{blog.createdAt}</TableCell>
+                                    <TableCell className="text-right">
+                                            <Link to={`/blogs/show/${blog._id}`}> 
+                                                <IconButton> <Visibility /> </IconButton>
+                                            </Link>
+                                        </TableCell>
                                 </TableRow>)) :
                                 <TableRow>
                                     <TableCell>No data found.</TableCell>

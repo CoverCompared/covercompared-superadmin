@@ -14,9 +14,9 @@ export default () => {
     }, (error) => {
         const status = error.response.status;
         if (status === 401) {
-            console.log("Dispatch Profile");
+            // console.log("Dispatch Profile");
             // store.
-            // window.location.href = `/login`;
+            window.location.href = `/login`;
         }
         return Promise.reject(error);
     })

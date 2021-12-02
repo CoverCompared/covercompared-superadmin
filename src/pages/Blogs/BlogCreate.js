@@ -21,7 +21,6 @@ import { spacing } from "@material-ui/system";
 import { Link } from "react-router-dom";
 import ReactQuill from "react-quill";
 
-
 const Divider = styled(MuiDivider)(spacing);
 
 const Typography = styled(MuiTypography)(spacing);
@@ -51,6 +50,7 @@ function BlogCreate({ theme, history }, props) {
     let _form = { ...form };
     _form[e.target.name].value = e.target.value;
     setForm(_form);
+    
   }
 
   const submitMessage = async () => {
@@ -82,8 +82,6 @@ function BlogCreate({ theme, history }, props) {
 
   const submitForm = async () => {
     setForm(utils.formTouchAllField({ ...form }));
-    var axios = require('axios');
-    var FormData = require('form-data');
 
     let bodyFormData = new FormData();
     bodyFormData.append('title', form.title.value);
@@ -122,6 +120,9 @@ function BlogCreate({ theme, history }, props) {
     _form['content'].value = value;
     setForm(_form);
   }
+
+  
+   
 
   return (
     <React.Fragment>

@@ -26,4 +26,10 @@ BlogService.add = async (data) => {
         headers: { 'content-type': 'multipart/form-data' }
     })
 }
+
+ 
+BlogService.show = async (id) => {
+    return axios({ url: `${API_BASE_URL}/admin/blogs/${id}` })
+}
+
 export default BlogService;
