@@ -122,6 +122,7 @@ const blogShowRoutes = {
   component: BlogShow
 };
 
+
 const coversRoutes = {
   id: "Covers",
   path: "/covers",

@@ -16,7 +16,7 @@ export default () => {
         if (status === 401) {
             // console.log("Dispatch Profile");
             // store.
-            window.location.href = `/login`;
+            window.location.href = `/superadmin/login`;
         }
         return Promise.reject(error);
     })
