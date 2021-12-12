@@ -167,14 +167,13 @@ auth.sendResetMail = async (mail) => {
         sendPasswordResetEmail(firebaseAuth, mail).then(() => {
             resolve({ status: true, message: "Mail sent successfully." });
         }).catch((e) => {
-            if(e.code && e.code == "auth/user-not-found"){
+            if (e.code && e.code == "auth/user-not-found") {
                 resolve({ status: false, message: "User does not exist." });
-            }else{
+            } else {
                 resolve({ status: false, message: "Something went wrong." });
             }
         })
     });
 }
-
 
 export default auth;

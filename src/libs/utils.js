@@ -110,4 +110,58 @@ utils.convertPaginationResponse = (response) => {
     };
 }
 
+utils.filterToQuery = ({ from, to, order_field, order_by, q, ...filters }) => {
+    let queryParams = {
+        range: `[${from},${to}]`
+    };
+
+    let filter = {};
+    if (q) filter['q'] = q;
+    for (const key in filters) {
+        if (filters[key]) filter[key] = filters[key];
+    }
+
+    if (order_field) queryParams['order_field'] = order_field;
+    if (order_by) queryParams['order_by'] = order_by;
+    if (Object.keys(filter).length) queryParams['filter'] = JSON.stringify(filter);
+    return utils.objToQuery(queryParams)
+}
+
+utils.queryToFilter = (query_string) => {
+    let obj = {};
+
+    query_string = decodeURIComponent(query_string);
+    query_string = query_string.split("?");
+    query_string = _.get(query_string, "1", "");
+    query_string = query_string.split("&");
+    query_string = query_string.map(val => val.split("="));
+    let query_obj = {};
+    query_string.forEach((val) => {
+        query_obj[val[0]] = val[1] ? val[1] : "";
+    })
+
+
+
+    if (query_obj.range) {
+        try {
+            let range = JSON.parse(query_obj.range);
+            obj.from = range[0];
+            obj.to = range[1];
+        } catch (error) { }
+    }
+
+    if (query_obj.filter) {
+        try {
+            const search = JSON.parse(query_obj.filter);
+            obj = {...obj, ...search };
+        } catch (error) { }
+    }
+
+    if (query_obj.order_field) obj["order_field"] = query_obj.order_field;
+    if (query_obj.order_by) obj["order_by"] = query_obj.order_by;
+
+    return obj;
+
+}
+
 export default utils;

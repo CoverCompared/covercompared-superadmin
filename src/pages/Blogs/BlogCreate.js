@@ -94,11 +94,13 @@ function BlogCreate({ theme, history }, props) {
 
       let response = await BlogService.add(bodyFormData);
       if (response.data.success) {
+        console.log(props.history);
         /**
          * TODO: Stop loader
          */
         enqueueSnackbar(response.data.message, { variant: "success", autoHideDuration: '3s' });
         history.push(`/blogs/show/${response.data.data._id}`)
+        // history.push(`/blogs`)
       } else {
         /**
          * TODO: Stop loader

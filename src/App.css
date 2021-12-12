@@ -53,3 +53,21 @@
 .blog-status{
     text-transform: capitalize;
 }
+.button-align-ctm{
+    margin-left: 4px;
+}
+.text-capitalize{
+    text-transform: capitalize;   
+}
+.dash-sub-count span{
+    font-weight: 300;
+    float: right;
+}
+.dash-sub-count{
+    font-weight: 200;
+}
+.dash-count-icon{
+    filter: invert(1);
+    max-height: 50px;
+    width: auto;
+}

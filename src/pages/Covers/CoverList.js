@@ -18,6 +18,7 @@ import utils from "../../libs/utils";
 import PolicyService from "../../libs/services/policies";
 import { PRODUCT_TYPE_NAMES } from "../../libs/constants";
 import { FilterList, Search, Visibility } from "@material-ui/icons";
+import { withRouter } from "react-router-dom";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -33,14 +34,41 @@ class BasicTable extends React.Component {
         total_pages: 0,
         total_records: 0,
         current_page: 0,
-        rows_per_page: 10,
+        rows_per_page: 1,
         is_filter_open: false,
         rows: [],
         product_type: ""
     }
 
     componentDidMount() {
-        this.loadTable();
+
+        let { q, from, to, product_type, status } = utils.queryToFilter(this.props.location.search);
+
+        if(this.state.status_options.includes(status)){
+            status = this.state.status_options.indexOf(status)
+        }
+
+        let current_page = this.state.current_page;
+        let rows_per_page = this.state.rows_per_page;
+        if(from !== undefined && to !== undefined){
+            rows_per_page = to - from;
+            current_page = from/rows_per_page;
+        }
+
+        this.setState({
+            q: q ? q : this.state.q, 
+            product_type: product_type ? product_type : this.state.product_type, 
+            status: status ? status : this.state.status, 
+            current_page, rows_per_page
+        }, () => {
+            this.loadTable();
+        })
+
+
+    }
+
+    resetFilter = () => {
+        this.setState({ q: "", total_pages: 0, total_records: 0, current_page: 0, product_type: "" })
     }
 
     loadTable = async () => {
@@ -60,6 +88,8 @@ class BasicTable extends React.Component {
             if (this.state.product_type) req['product_type'] = this.state.product_type;
             if (this.state.q) req['q'] = this.state.q;
 
+            let query_string= utils.filterToQuery(req);
+            this.props.history.push(`/covers?${query_string}`)
             let response = await PolicyService.table(req);
 
             /**
@@ -90,10 +120,12 @@ class BasicTable extends React.Component {
     }
 
     handleChangeStatus = (event, status) => {
+        this.resetFilter();
         this.setState({ status }, this.loadTable)
     }
 
     handleChangeSearch = (e) => {
+        this.props.history.push(`/covers?${e.target.name}=${e.target.value}`)
         this.setState({ [e.target.name]: e.target.value }, this.loadTable);
     }
 
@@ -152,6 +184,7 @@ class BasicTable extends React.Component {
                                     <TableCell>Status</TableCell>
                                     <TableCell>Payment Status</TableCell>
                                     <TableCell className="text-right">Total Amount</TableCell>
+                                    <TableCell className="text-right">Date</TableCell>
                                     <TableCell className="text-right">View</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -164,9 +197,13 @@ class BasicTable extends React.Component {
                                         <TableCell>{cover.user && cover.user.email}</TableCell>
                                         <TableCell className="text-capitalize">{cover.status}</TableCell>
                                         <TableCell className="text-capitalize">{cover.payment_status}</TableCell>
-                                        <TableCell className="text-right">{cover.total_amount} {cover.currency}</TableCell>
                                         <TableCell className="text-right">
-                                            <Link to={`/covers/show/${cover._id}`}> 
+                                            {["device_insurance", "mso_policy"].includes(cover.product_type) && <React.Fragment>{cover.total_amount} {cover.currency}</React.Fragment>}
+                                            {["smart_contract", "crypto_exchange"].includes(cover.product_type) && <React.Fragment>{cover.crypto_amount} {cover.crypto_currency}</React.Fragment>}
+                                        </TableCell>
+                                        <TableCell className="text-right">{utils.getFormattedDate(cover.createdAt)}</TableCell>
+                                        <TableCell className="text-right">
+                                            <Link to={`/covers/show/${cover._id}`}>
                                                 <IconButton> <Visibility /> </IconButton>
                                             </Link>
                                         </TableCell>
@@ -194,9 +231,11 @@ class BasicTable extends React.Component {
     };
 }
 
+BasicTable = withRouter(BasicTable)
+
 function CoverList({ theme }) {
     return (
-        <React.Fragment>
+        <React.Fragment>CoverList
             <Helmet title="Default Dashboard" />
             <Grid container justify="space-between" spacing={6}>
                 <Grid item>
@@ -218,4 +257,4 @@ function CoverList({ theme }) {
     );
 }
 
-export default withTheme(CoverList);
+export default withRouter(withTheme(CoverList));

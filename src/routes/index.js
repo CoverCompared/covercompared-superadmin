@@ -29,6 +29,7 @@ const ContactUsList = async(() => import("../pages/ContactUs/ContactUsList"));
 const BlogsList = async(() => import("../pages/Blogs/BlogList"));
 const BlogShow = async(() => import("../pages/Blogs/BlogShow"));
 const BlogCreate = async(() => import("../pages/Blogs/BlogCreate"));
+const BlogUpdate = async(() => import("../pages/Blogs/BlogUpdate"));
 const CoverList = async(() => import("../pages/Covers/CoverList"));
 const CoverShow = async(() => import("../pages/Covers/CoverShow"));
 
@@ -146,6 +147,15 @@ const blogCreateRoutes = {
   icon: <VerticalSplit />,
   component: BlogCreate
 };
+
+const blogUpdateRoutes = {
+  id: "Blogs",
+  path: "/blogs/edit/:id",
+  exactMatch: false,
+  icon: <VerticalSplit />,
+  component: BlogUpdate
+};
+
 
 const pagesRoutes = {
   id: "Pages",
@@ -442,6 +452,7 @@ export const dashboard = [
   blogsRoutes,
   blogShowRoutes,
   blogCreateRoutes,
+  blogUpdateRoutes,
   coversRoutes,
   coverShowRoutes,
   pagesRoutes,

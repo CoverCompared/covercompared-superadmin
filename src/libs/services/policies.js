@@ -5,21 +5,11 @@ import utils from "../utils";
 
 let PolicyService = {};
 
-PolicyService.table = async ({ from, to, status, product_type, order_field, order_by, q }) => {
-    let queryParams = {
-        range: `[${from},${to}]`
-    };
+PolicyService.table = async ({ from, to, order_field, order_by, q, ...filter_options }) => {
 
-    let filter = {};
-    if (status) filter['status'] = status;
-    if (product_type) filter['product_type'] = product_type;
-    if (q) filter['q'] = q;
-
-    if (order_field) queryParams['order_field'] = order_field;
-    if (order_by) queryParams['order_by'] = order_by;
-    if (Object.keys(filter).length) queryParams['filter'] = JSON.stringify(filter);
+    let query_string = utils.filterToQuery({ from, to, order_field, order_by, q, ...filter_options });
     
-    const url = `${API_BASE_URL}/admin/policies?${utils.objToQuery(queryParams)}`;
+    const url = `${API_BASE_URL}/admin/policies?${query_string}`;
     const res = await axios({ url });
     return res;
 }

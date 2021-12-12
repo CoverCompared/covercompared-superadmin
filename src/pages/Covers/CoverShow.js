@@ -3,6 +3,7 @@ import styled, { withTheme } from "styled-components";
 
 import Helmet from 'react-helmet';
 import { useParams } from "react-router-dom";
+import _ from "lodash";
 
 import {
   Grid,
@@ -30,6 +31,7 @@ import PolicyService from "../../libs/services/policies";
 import { PRODUCT_TYPE_NAMES } from "../../libs/constants";
 import utils from "../../libs/utils";
 import countryList from "react-select-country-list";
+import UtilsService from "../../libs/services/utils";
 
 
 const Divider = styled(MuiDivider)(spacing);
@@ -128,7 +130,7 @@ function CryptoPaymentDetails({ payment }) {
   return <Grid item lg={6} xs={12}>
     <Card>
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div"> Crypto Payment Details</Typography>
+        <Typography gutterBottom variant="h5" component="div"> Crypto Transaction Details</Typography>
         <Divider className="mb-3" />
         <div>
           <FormControl className="m-2">
@@ -204,6 +206,12 @@ function DeviceInsuranceDetails({ cover }) {
             <FormControl className="m-2">
               <FormLabel>Phone No.</FormLabel>
               <Typography>{cover.details && cover.details.phone}</Typography>
+            </FormControl>
+          </div>
+          <div >
+            <FormControl className="m-2">
+              <FormLabel>Date</FormLabel>
+              <Typography>{cover.createdAt && utils.getFormattedDate(cover.createdAt)}</Typography>
             </FormControl>
           </div>
         </CardContent>
@@ -290,6 +298,12 @@ function MSOPolicyDetails({ cover }) {
               <Typography>{cover.user && cover.user.email}</Typography>
             </FormControl>
           </div>
+          <div >
+            <FormControl className="m-2">
+              <FormLabel>Date</FormLabel>
+              <Typography>{cover.createdAt && utils.getFormattedDate(cover.createdAt)}</Typography>
+            </FormControl>
+          </div>
         </CardContent>
       </Card>
     </Grid>
@@ -350,6 +364,112 @@ function MSOPolicyDetails({ cover }) {
   </Grid>)
 }
 
+function SmartContractDetails({ cover }) {
+
+  const [companyName, setCompanyName] = useState({});
+
+  useEffect(() => {
+    UtilsService.getConstant().then((response) => {
+      setCompanyName(_.get(response, "COMPANY_NAMES", {}));
+    })
+  }, [])
+
+  const getCompanyName = (company_code) => {
+    if(companyName && companyName[company_code]){
+      return companyName[company_code].name;
+    }else{
+      return company_code;
+    }
+  }
+
+  return (<Grid container spacing={2}>
+    <Grid item lg={4} xs={12}>
+      <Card className="h-100">
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div"> Cover Details </Typography>
+          <Divider className="mb-3" />
+          <div >
+            <FormControl className="m-2">
+              <FormLabel>Product Type</FormLabel>
+              <Typography>{PRODUCT_TYPE_NAMES[cover.product_type]}</Typography>
+            </FormControl>
+            <FormControl className="m-2">
+              <FormLabel>Txn Hash</FormLabel>
+              <Typography>{cover.txn_hash}</Typography>
+            </FormControl>
+            <FormControl className="m-2 float-right">
+              <FormLabel>Status</FormLabel>
+              <Typography className="text-capitalize">{cover.status}</Typography>
+            </FormControl>
+          </div>
+          <div >
+            <FormControl className="m-2">
+              <FormLabel>Name</FormLabel>
+              <Typography>{cover.user && cover.user.first_name} {cover.user && cover.user.last_name}</Typography>
+            </FormControl>
+          </div>
+          <div >
+            <FormControl className="m-2">
+              <FormLabel>Email</FormLabel>
+              <Typography>{cover.user && cover.user.email}</Typography>
+            </FormControl>
+          </div>
+          <div >
+            <FormControl className="m-2">
+              <FormLabel>Date</FormLabel>
+              <Typography>{cover.createdAt && utils.getFormattedDate(cover.createdAt)}</Typography>
+            </FormControl>
+          </div>
+        </CardContent>
+      </Card>
+    </Grid>
+    {
+      (cover.details) &&
+      <Grid item lg={8} xs={12}>
+        <Card className="h-100">
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div"> Smart Contract Details</Typography>
+            <Divider className="mb-3" />
+            <FormControl className="m-2">
+              <FormLabel>Company</FormLabel>
+              <Typography>{cover.details.company_code ? getCompanyName(cover.details.company_code) : "--"}</Typography>
+            </FormControl>
+            <FormControl className="m-2">
+              <FormLabel>Contract Name</FormLabel>
+              <Typography>{cover.details.name ? cover.details.name : "--"}</Typography>
+            </FormControl>
+            <br />
+            <FormControl className="m-2">
+              <FormLabel>Contract Address</FormLabel>
+              <Typography>{cover.details.address ? cover.details.address : "--"}</Typography>
+            </FormControl>
+            <br />
+            <FormControl className="m-2">
+              <FormLabel>Chain</FormLabel>
+              <Typography>{cover.details.chain ? cover.details.chain : "--"}</Typography>
+            </FormControl>
+            <FormControl className="m-2">
+              <FormLabel>Currency</FormLabel>
+              <Typography>{cover.details.crypto_amount ? cover.details.crypto_amount : "--"} {cover.details.crypto_currency ? cover.details.crypto_currency : "--"}</Typography>
+            </FormControl>
+            <br />
+            <FormControl className="m-2">
+              <FormLabel>Type</FormLabel>
+              <Typography className="text-capitalize">{cover.details.type ? cover.details.type : "--"}</Typography>
+            </FormControl>
+            <FormControl className="m-2">
+              <FormLabel>Duration Days</FormLabel>
+              <Typography>{cover.details.duration_days ? cover.details.duration_days : "--"}</Typography>
+            </FormControl>
+          </CardContent>
+        </Card>
+      </Grid>
+    }
+    {cover.payment && <CryptoPaymentDetails payment={cover.payment} />}
+    {cover.reviews && <ReviewRating review={cover.reviews} />}
+  </Grid>)
+}
+
 function CoverShow({ theme }) {
 
   const params = useParams();
@@ -390,6 +510,7 @@ function CoverShow({ theme }) {
 
       {cover.product_type === "device_insurance" && <DeviceInsuranceDetails cover={cover} />}
       {cover.product_type === "mso_policy" && <MSOPolicyDetails cover={cover} />}
+      {cover.product_type === "smart_contract" && <SmartContractDetails cover={cover} />}
 
     </React.Fragment>
   );

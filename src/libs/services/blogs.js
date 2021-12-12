@@ -47,4 +47,16 @@ BlogService.delete = async (id) => {
 }
 
 
+
+BlogService.update = async (id , data) => {
+    const url = `${API_BASE_URL}/admin/blogs/${id}`;
+    const res = await axios({
+      url,
+      method: "PUT",
+      headers: { 'content-type': 'multipart/form-data' },
+      data
+    });
+    return res;
+  }
+
 export default BlogService;
