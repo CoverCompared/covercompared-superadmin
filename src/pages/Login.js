@@ -23,6 +23,7 @@ const Wrapper = styled(Paper)`
 function Login(props) {
 
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const [form, setForm] = useState({
@@ -62,6 +63,7 @@ function Login(props) {
     /**
      * TODO: Start Loader
      */
+    setProcessing(true);
 
     try {
       let data = await AuthService.login(form.email.value, form.password.value);
@@ -69,12 +71,14 @@ function Login(props) {
         /**
          * TODO: Stop loader
          */
+         setProcessing(false);
         props.history.push(`/`);
         enqueueSnackbar(data.message, { variant: "success", autoHideDuration: '3s' });
       } else {
         /**
          * TODO: Stop loader
          */
+         setProcessing(false);
         setValidateMessage({ email: data.message, password: "" });
       }
     }
@@ -82,7 +86,8 @@ function Login(props) {
       /**
        * TODO: Stop loader
        */
-       enqueueSnackbar("Something went wrong.", { variant: "error", autoHideDuration: '3s' });
+       setProcessing(false);
+      enqueueSnackbar("Something went wrong.", { variant: "error", autoHideDuration: '3s' });
     }
   }
 
@@ -131,10 +136,10 @@ function Login(props) {
           variant="contained"
           color="primary"
           mb={2}
-          disabled={Boolean(Object.keys(validateMessage).length)}
+          disabled={Boolean(Object.keys(validateMessage).length) || processing}
           onClick={submitForm}
         >
-          Sign in
+          {processing ? "Processing..." : "Sign in"}
         </Button>
       </form>
     </Wrapper>

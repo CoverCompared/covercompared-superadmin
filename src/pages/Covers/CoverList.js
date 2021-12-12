@@ -34,7 +34,7 @@ class BasicTable extends React.Component {
         total_pages: 0,
         total_records: 0,
         current_page: 0,
-        rows_per_page: 1,
+        rows_per_page: 10,
         is_filter_open: false,
         rows: [],
         product_type: ""
@@ -235,7 +235,7 @@ BasicTable = withRouter(BasicTable)
 
 function CoverList({ theme }) {
     return (
-        <React.Fragment>CoverList
+        <React.Fragment>
             <Helmet title="Default Dashboard" />
             <Grid container justify="space-between" spacing={6}>
                 <Grid item>
