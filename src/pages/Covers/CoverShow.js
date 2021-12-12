@@ -428,7 +428,7 @@ function SmartContractDetails({ cover }) {
       <Grid item lg={8} xs={12}>
         <Card className="h-100">
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div"> Smart Contract Details</Typography>
+            <Typography gutterBottom variant="h5" component="div"> {cover.product_type === "smart_contract" && "Smart Contract"} {cover.product_type === "crypto_exchange" && "Crypto Exchange"} Details</Typography>
             <Divider className="mb-3" />
             <FormControl className="m-2">
               <FormLabel>Company</FormLabel>
@@ -511,6 +511,7 @@ function CoverShow({ theme }) {
       {cover.product_type === "device_insurance" && <DeviceInsuranceDetails cover={cover} />}
       {cover.product_type === "mso_policy" && <MSOPolicyDetails cover={cover} />}
       {cover.product_type === "smart_contract" && <SmartContractDetails cover={cover} />}
+      {cover.product_type === "crypto_exchange" && <SmartContractDetails cover={cover} />}
 
     </React.Fragment>
   );
