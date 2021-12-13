@@ -1,11 +1,11 @@
 import axios from "axios";
 import store from "../../redux/store";
+import AuthService from "./auth";
 
 export default () => {
     axios.interceptors.request.use((request) => {
         const url = request.url;
-        const token = localStorage.getItem("token");
-        request.headers["Authorization"] = token;
+        request.headers = AuthService.getHeader();
         return request;
     })
 

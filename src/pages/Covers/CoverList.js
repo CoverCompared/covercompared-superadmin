@@ -1,5 +1,6 @@
 import React from "react";
 import styled, { withTheme } from "styled-components";
+import { saveAs } from "file-saver";
 
 import Helmet from 'react-helmet';
 import _ from "lodash";
@@ -16,9 +17,14 @@ import { spacing } from "@material-ui/system";
 import { Link } from "react-router-dom";
 import utils from "../../libs/utils";
 import PolicyService from "../../libs/services/policies";
+import AuthService from "../../libs/services/auth";
 import { PRODUCT_TYPE_NAMES } from "../../libs/constants";
 import { FilterList, Search, Visibility } from "@material-ui/icons";
 import { withRouter } from "react-router-dom";
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from '@date-io/date-fns';
+import { API_BASE_URL } from "./../../libs/config"
+
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -30,6 +36,8 @@ class BasicTable extends React.Component {
     state = {
         status_options: ["all", "active", "pending", "cancelled"],
         status: 0,
+        from_date: null,
+        to_date: null,
         q: "",
         total_pages: 0,
         total_records: 0,
@@ -37,6 +45,7 @@ class BasicTable extends React.Component {
         rows_per_page: 10,
         is_filter_open: false,
         rows: [],
+        downloading: false,
         product_type: ""
     }
 
@@ -44,21 +53,21 @@ class BasicTable extends React.Component {
 
         let { q, from, to, product_type, status } = utils.queryToFilter(this.props.location.search);
 
-        if(this.state.status_options.includes(status)){
+        if (this.state.status_options.includes(status)) {
             status = this.state.status_options.indexOf(status)
         }
 
         let current_page = this.state.current_page;
         let rows_per_page = this.state.rows_per_page;
-        if(from !== undefined && to !== undefined){
+        if (from !== undefined && to !== undefined) {
             rows_per_page = to - from;
-            current_page = from/rows_per_page;
+            current_page = from / rows_per_page;
         }
 
         this.setState({
-            q: q ? q : this.state.q, 
-            product_type: product_type ? product_type : this.state.product_type, 
-            status: status ? status : this.state.status, 
+            q: q ? q : this.state.q,
+            product_type: product_type ? product_type : this.state.product_type,
+            status: status ? status : this.state.status,
             current_page, rows_per_page
         }, () => {
             this.loadTable();
@@ -71,6 +80,21 @@ class BasicTable extends React.Component {
         this.setState({ q: "", total_pages: 0, total_records: 0, current_page: 0, product_type: "" })
     }
 
+    createRequestObj = () => {
+        let req = {
+            from: ((this.state.current_page) * this.state.rows_per_page),
+            to: ((this.state.current_page + 1) * this.state.rows_per_page),
+        };
+
+
+        if (this.state.status > 0) req['status'] = this.state.status_options[this.state.status];
+        if (this.state.product_type) req['product_type'] = this.state.product_type;
+        if (this.state.from_date) req['from_date'] = this.state.from_date;
+        if (this.state.to_date) req['to_date'] = this.state.to_date;
+        if (this.state.q) req['q'] = this.state.q;
+        return req;
+    }
+
     loadTable = async () => {
         /**
          * TODO: Start Loader
@@ -78,18 +102,11 @@ class BasicTable extends React.Component {
         try {
             let status = [""]
 
-            let req = {
-                from: ((this.state.current_page) * this.state.rows_per_page),
-                to: ((this.state.current_page + 1) * this.state.rows_per_page),
-            };
-
-
-            if (this.state.status > 0) req['status'] = this.state.status_options[this.state.status];
-            if (this.state.product_type) req['product_type'] = this.state.product_type;
-            if (this.state.q) req['q'] = this.state.q;
-
-            let query_string= utils.filterToQuery(req);
+            let req = this.createRequestObj()
+            
+            let query_string = utils.filterToQuery(req);
             this.props.history.push(`/covers?${query_string}`)
+
             let response = await PolicyService.table(req);
 
             /**
@@ -125,8 +142,28 @@ class BasicTable extends React.Component {
     }
 
     handleChangeSearch = (e) => {
-        this.props.history.push(`/covers?${e.target.name}=${e.target.value}`)
         this.setState({ [e.target.name]: e.target.value }, this.loadTable);
+    }
+
+    handleChangeDate = (key, date) => {
+        this.setState({ [key]: date }, this.loadTable);
+    }
+
+    downloadCSV = () => {
+        if (this.state.from_date && this.state.to_date && Array.isArray(this.state.rows) && this.state.rows.length) {
+            this.setState({ downloading: true });
+
+            let req = this.createRequestObj();
+            let query_string = utils.filterToQuery(req);
+            let url = `${API_BASE_URL}/admin/policies?${query_string}&export=csv`
+
+            fetch(url, { headers: AuthService.getHeader() })
+            .then(res => res.blob())
+            .then(blob => {
+                this.setState({ downloading: false })
+                saveAs(blob, `Cover Compared Policies Report (${utils.getFormattedDate(this.state.from_date)} - ${utils.getFormattedDate(this.state.to_date)} ).csv`)
+            })
+        }
     }
 
     render() {
@@ -135,18 +172,62 @@ class BasicTable extends React.Component {
                 <Paper className="p-2 mb-3">
                     <Grid container spacing={2} className="mb-2">
                         <Grid item sm={9} xs={6}>
-                            <FormControl fullWidth style={{ width: "300px" }}>
-                                <InputLabel>Product Type</InputLabel>
-                                <Select
-                                    value={this.state.product_type}
-                                    label="Product Type"
-                                    name="product_type"
-                                    onChange={this.handleChangeSearch}
-                                >
-                                    <MenuItem value="">All</MenuItem>
-                                    {Object.keys(PRODUCT_TYPE_NAMES).map((product_type, ind) => (<MenuItem value={product_type} key={ind}>{PRODUCT_TYPE_NAMES[product_type]}</MenuItem>))}
-                                </Select>
-                            </FormControl>
+                            <Grid container spacing={2}>
+                                <Grid item sm={12} md={3}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Product Type</InputLabel>
+                                        <Select
+                                            value={this.state.product_type}
+                                            label="Product Type"
+                                            name="product_type"
+                                            onChange={this.handleChangeSearch}
+                                        >
+                                            <MenuItem value="">All</MenuItem>
+                                            {Object.keys(PRODUCT_TYPE_NAMES).map((product_type, ind) => (<MenuItem value={product_type} key={ind}>{PRODUCT_TYPE_NAMES[product_type]}</MenuItem>))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item sm={12} md={3}>
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <DatePicker
+                                            className="mr-5px"
+                                            fullWidth
+                                            label="Start Date"
+                                            animateYearScrolling
+                                            name="from_date"
+                                            clearable
+                                            value={this.state.from_date}
+                                            onChange={(date) => { this.handleChangeDate("from_date", date) }}
+                                        />
+                                    </MuiPickersUtilsProvider>
+                                </Grid>
+                                <Grid item sm={12} md={3}>
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <DatePicker
+                                            className="mr-5px"
+                                            label="End Date"
+                                            fullWidth
+                                            animateYearScrolling
+                                            name="to_date"
+                                            clearable
+                                            value={this.state.to_date}
+                                            onChange={(date) => { this.handleChangeDate("to_date", date) }}
+                                        />
+                                    </MuiPickersUtilsProvider>
+                                </Grid>
+                                {
+                                    this.state.from_date && this.state.to_date && <Grid item sm={12} md={12}>
+                                        <div className="d-flex">
+                                            <Button
+                                                onClick={this.downloadCSV}
+                                                disabled={(!(Array.isArray(this.state.rows) && this.state.rows.length)) || this.state.downloading}
+                                                color="primary" variant="contained">
+                                                {this.state.downloading ? "Downloading..." : "Download CSV"}
+                                            </Button>
+                                        </div>
+                                    </Grid>
+                                }
+                            </Grid>
                         </Grid>
                         <Grid item sm={3} xs={6}>
                             <TextField

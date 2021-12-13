@@ -176,4 +176,11 @@ auth.sendResetMail = async (mail) => {
     });
 }
 
+auth.getHeader = () => {
+    const token = localStorage.getItem("token");
+    return {
+        "Authorization": token
+    }
+}
+
 export default auth;
