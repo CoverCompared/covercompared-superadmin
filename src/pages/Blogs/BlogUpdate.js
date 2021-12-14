@@ -21,6 +21,7 @@ import {
 import { spacing } from "@material-ui/system";
 import { Link } from "react-router-dom";
 import ReactQuill from "react-quill";
+import _ from "lodash";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -54,7 +55,6 @@ function BlogUpdate({ theme, history }, props) {
     let _form = { ...form };
     _form[e.target.name].value = e.target.value;
     setForm(_form);
-    
   }
 
   const submitMessage = async () => {
@@ -84,8 +84,16 @@ function BlogUpdate({ theme, history }, props) {
     BlogService.show(params.id)
     .then((response) => {
       if (response.data && response.data.success) {
-        setBlog(response.data.data);
-        console.log(response.data.data);
+        let _form = { ...form };
+        let blog = response.data.data;
+        _form.title.value = _.get(blog, "title", "");
+        _form.description.value = _.get(blog, "description", "");
+        _form.content.value = _.get(blog, "content", "");
+        
+        _form.image.value = _.get(blog, "image", "");
+        setImageDataUrl(_.get(blog, "image", ""));
+
+        setForm(_form)
       } else {
         setNotFound(true);
       }
@@ -165,7 +173,7 @@ function BlogUpdate({ theme, history }, props) {
             <TextField variant="standard" margin="normal" fullWidth
               label="Title"
               name="title"
-              value={(blog.title != "")? blog.title: form.title.value} onChange={handleChange}
+              value={form.title.value} onChange={handleChange}
               onBlur={onBlur}
               error={form.title.isTouched === true && validateMessage.title !== undefined}
               helperText={form.title.isTouched === true ? validateMessage.title : ""}
@@ -174,7 +182,7 @@ function BlogUpdate({ theme, history }, props) {
             <TextField variant="standard" margin="normal" fullWidth
               label="Description"
               name="description"
-              value={(blog.description != "")? blog.description :form.description.value} onChange={handleChange}
+              value={form.description.value} onChange={handleChange}
               onBlur={onBlur}
               error={form.description.isTouched === true && validateMessage.description !== undefined}
               helperText={form.description.isTouched === true ? validateMessage.description : ""}
@@ -198,7 +206,6 @@ function BlogUpdate({ theme, history }, props) {
             <ReactQuill
               name="content"
               theme="snow"
-              dangerouslySetInnerHTML={{ __html: blog.content }}
               value={form.content.value}
               onChange={handleChangeReachTextEditor}
               onBlur={(e) => { onBlur({ target: { name: "content" } }) }}

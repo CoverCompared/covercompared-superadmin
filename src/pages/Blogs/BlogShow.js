@@ -31,6 +31,7 @@ function BlogShow({ theme } , props) {
 
   const params = useParams();
   const [blog, setBlog] = useState({});
+  const [_status, setStatus] = useState({});
   const [notFound, setNotFound] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const history = useHistory();
@@ -40,6 +41,7 @@ function BlogShow({ theme } , props) {
       .then((response) => {
         if (response.data && response.data.success) {
           setBlog(response.data.data);
+          setStatus(response.data.data.status);
           // console.log(response.data.data);
         } else {
           setNotFound(true);
@@ -48,6 +50,8 @@ function BlogShow({ theme } , props) {
         setNotFound(true);
       })
   },
+
+  
 
 
   
@@ -71,15 +75,15 @@ function BlogShow({ theme } , props) {
  } 
 
  function changeStatus(status){
+   alert(status);
   let bodyFormData = new FormData();
     bodyFormData.append('status', status);
-
+  console.log(bodyFormData);
   BlogService.update(blog._id, bodyFormData)
   .then((response) => {
     if (response.data && response.data.success) {
-        console.log(props.history);
         enqueueSnackbar(response.data.message, { variant: "success", autoHideDuration: '3s' });
-        history.push('/blogs');
+        setStatus(status);
     } else {
       let message = response.data.data.image ? response.data.data.image.message : "Something went wrong.";
       enqueueSnackbar(message, { variant: "error", autoHideDuration: '3s' });
@@ -108,8 +112,8 @@ function BlogShow({ theme } , props) {
       
         <CardContent style={{ float: "right" }}>
         
-        {_.get(blog, "status", false) === "draft" && <Button onClick={() => { changeStatus("published") }} className="ml-2" variant="contained" color="primary">Published</Button>}
-        {_.get(blog, "status", false) === "published" && <Button onClick={() => { changeStatus("draft") }} className="ml-2" variant="contained" color="secondary">Draft</Button>}
+        {_status === "draft" && <Button onClick={() => { changeStatus("published") }} className="ml-2" variant="contained" color="primary">Published</Button>}
+        {_status === "published" && <Button onClick={() => { changeStatus("draft") }} className="ml-2" variant="contained" color="secondary">Draft</Button>}
         
         <Button className="button-align-ctm" onClick={() => { deleteBlog(blog._id) }} variant="contained" color="primary">Delete</Button>
         <Button className="button-align-ctm" onClick={() => { history.push(`/blogs/edit/${blog._id}`) }} variant="contained" color="primary">Edit</Button>

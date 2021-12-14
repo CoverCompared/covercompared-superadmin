@@ -21,6 +21,7 @@ import {
   Settings as SettingsIcon
 } from "react-feather";
 import { ContactMail, DescriptionOutlined, VerticalSplit } from "@material-ui/icons";
+import MSOIcon from "../assets/mso.svg";
 
 const HomePage = async(() => import("../pages/HomePage"));
 const Settings = async(() => import("../pages/Settings"));
@@ -32,6 +33,7 @@ const BlogCreate = async(() => import("../pages/Blogs/BlogCreate"));
 const BlogUpdate = async(() => import("../pages/Blogs/BlogUpdate"));
 const CoverList = async(() => import("../pages/Covers/CoverList"));
 const CoverShow = async(() => import("../pages/Covers/CoverShow"));
+const MSOPoliciesList = async(() => import("../pages/MSOPolicies/MSOPoliciesList"));
 
 // Auth components
 const SignIn = async(() => import("../pages/auth/SignIn"));
@@ -130,6 +132,14 @@ const coversRoutes = {
   exactMatch: false,
   icon: <DescriptionOutlined />,
   component: CoverList
+};
+
+const msoPoliciesRoutes = {
+  id: "MSO Policies",
+  path: "/mso-policies",
+  exactMatch: false,
+  icon: <img className="sidebar-icon" src={MSOIcon} />,
+  component: MSOPoliciesList
 };
 
 const coverShowRoutes = {
@@ -455,6 +465,7 @@ export const dashboard = [
   blogUpdateRoutes,
   coversRoutes,
   coverShowRoutes,
+  msoPoliciesRoutes,
   pagesRoutes,
   profileRoutes,
   projectsRoutes,
@@ -479,5 +490,6 @@ export default [
   coversRoutes,
   // contactUsRoutes,
   blogsRoutes,
+  msoPoliciesRoutes,
   settingsRoute
 ];
