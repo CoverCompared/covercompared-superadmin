@@ -21,7 +21,7 @@ import SweetAlert from 'sweetalert-react';
 import { spacing } from "@material-ui/system";
 import { Link } from "react-router-dom";
 import BlogService from "../../libs/services/blogs";
-import { Edit , Delete ,Visibility } from "@material-ui/icons";
+import { Edit, Delete, Visibility } from "@material-ui/icons";
 import { func } from "prop-types";
 
 const Divider = styled(MuiDivider)(spacing);
@@ -29,7 +29,7 @@ const Divider = styled(MuiDivider)(spacing);
 const Typography = styled(MuiTypography)(spacing);
 
 
-function BlogShow({ theme } , props) {
+function BlogShow({ theme }, props) {
 
   const params = useParams();
   const [blog, setBlog] = useState({});
@@ -47,7 +47,7 @@ function BlogShow({ theme } , props) {
         if (response.data && response.data.success) {
           setBlog(response.data.data);
           setStatus(response.data.data.status);
-          
+
         } else {
           setNotFound(true);
         }
@@ -56,20 +56,20 @@ function BlogShow({ theme } , props) {
       })
   },
 
-  
 
 
-  
-  [])
- function deleteBlog(id){
-  
-  
-     BlogService.delete(id)
+
+
+    [])
+  function deleteBlog(id) {
+
+
+    BlogService.delete(id)
       .then((response) => {
         if (response.data && response.data.success) {
-            console.log(props.history);
-            enqueueSnackbar(response.data.message, { variant: "success", autoHideDuration: '3s' });
-            history.push('/blogs');
+          console.log(props.history);
+          enqueueSnackbar(response.data.message, { variant: "success", autoHideDuration: '3s' });
+          history.push('/blogs');
         } else {
           let message = response.data.data.image ? response.data.data.image.message : "Something went wrong.";
           enqueueSnackbar(message, { variant: "error", autoHideDuration: '3s' });
@@ -77,67 +77,67 @@ function BlogShow({ theme } , props) {
       }).catch(err => {
         setNotFound(true);
       })
-    
- } 
+
+  }
 
 
 
 
 
-const handleDelete = (id) => {
-  Swal.fire({
-    title: 'Are you sure ?',
-    text: "You won't be able to revert this blog!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      deleteBlog(id);
-      // Swal.fire(
-      //   'Deleted!',
-      //   'Your file has been deleted.',
-      //   'success'
-      // )
-    }
-  })
-}
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: 'Are you sure ?',
+      text: "You won't be able to revert this blog!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteBlog(id);
+        // Swal.fire(
+        //   'Deleted!',
+        //   'Your file has been deleted.',
+        //   'success'
+        // )
+      }
+    })
+  }
 
 
- function changeStatus(status){
-   
-  let bodyFormData = new FormData();
+  function changeStatus(status) {
+
+    let bodyFormData = new FormData();
     bodyFormData.append('status', status);
-  
-  BlogService.update(blog._id, bodyFormData)
-  .then((response) => {
-    if (response.data && response.data.success) {
-      
-        enqueueSnackbar(response.data.message, { variant: "success", autoHideDuration: '2s' });
-        setStatus(status);
-        
-        BlogService.show(params.id)
-        .then((response) => {
-          if (response.data && response.data.success) {
-            setBlog(response.data.data);
-            setStatus(response.data.data.status);
-            
-          } else {
-            setNotFound(true);
-          }
-        })
 
-    } else {
-      
-      let message = response.data.data.image ? response.data.data.image.message : "Something went wrong.";
-      enqueueSnackbar(message, { variant: "error", autoHideDuration: '2s' });
-    }
-  }).catch(err => {
-    setNotFound(true);
-  })
- }
+    BlogService.update(blog._id, bodyFormData)
+      .then((response) => {
+        if (response.data && response.data.success) {
+
+          enqueueSnackbar(response.data.message, { variant: "success", autoHideDuration: '2s' });
+          setStatus(status);
+
+          BlogService.show(params.id)
+            .then((response) => {
+              if (response.data && response.data.success) {
+                setBlog(response.data.data);
+                setStatus(response.data.data.status);
+
+              } else {
+                setNotFound(true);
+              }
+            })
+
+        } else {
+
+          let message = response.data.data.image ? response.data.data.image.message : "Something went wrong.";
+          enqueueSnackbar(message, { variant: "error", autoHideDuration: '2s' });
+        }
+      }).catch(err => {
+        setNotFound(true);
+      })
+  }
 
   return (
     <React.Fragment>
@@ -153,51 +153,45 @@ const handleDelete = (id) => {
       </Breadcrumbs>
 
 
-      <Divider  my={6} />
-      <Card>    
-      
+      <Divider my={6} />
+      <Card>
+
         <CardContent>
-        <div class="button_padding">
-        {_status === "draft" && <Button onClick={() => { changeStatus("published") }} className="ml-2 status_btn" variant="contained" color="primary">Published</Button>}
-        {_status === "published" && <Button onClick={() => { changeStatus("draft") }} className="ml-2 status_btn" variant="contained" color="secondary">Draft</Button>}
-        <Button className="mr-5px status_btn" variant="contained" color="primary"><Visibility /> Preview</Button>
-        
-        <Button className="button-align-ctm secondary" onClick={() => { handleDelete(blog._id) }} variant="contained" ><Delete /> DELETE</Button>
-        
-        
+          <div class="button_padding">
+            {_status === "draft" && <Button onClick={() => { changeStatus("published") }} className="ml-2 float-right" variant="contained" color="primary">Published</Button>}
+            {_status === "published" && <Button onClick={() => { changeStatus("draft") }} className="ml-2 float-right" variant="contained" color="secondary">Draft</Button>}
+            <Button className="mr-5px float-right" variant="contained" color="primary"><Visibility /> Preview</Button>
 
-        
-        <Button className="button-align-ctm primary" onClick={() => { history.push(`/blogs/edit/${blog._id}`) }} variant="contained" ><Edit /> EDIT</Button>
-        
-        
+            <Button className="button-align-ctm btn-danger" onClick={() => { handleDelete(blog._id) }} variant="contained" ><Delete /> DELETE</Button>
+            <Button className="button-align-ctm btn-primary " onClick={() => { history.push(`/blogs/edit/${blog._id}`) }} variant="contained" ><Edit /> EDIT</Button>
 
-        </div>
-        </CardContent>                                        
+          </div>
+        </CardContent>
       </Card>
-      
-      <Divider  my={6} />
-      
+
+      <Divider my={6} />
+
       <Card >
         <CardContent>
           <Grid container spacing={7}>
-              <Grid item xs={6}>
-                  <div className="">
-                  <h3>{blog.title}</h3>
-                  </div>
-                  <h6 className="mb-2">Image :</h6>
-                  <img src={blog.image} className="mb-4" height="200px" width="300px"></img>
-                  <h6> Description : </h6>
-                  {blog.description}
-                  <h6 className="mt-4"> Status : </h6>
-                  {blog.status}
-                  <h6 className="mt-4">Content : </h6>
-                  <div dangerouslySetInnerHTML={{ __html: blog.content }}></div>
-              </Grid>
+            <Grid item xs={6}>
+              <div className="">
+                <h3>{blog.title}</h3>
+              </div>
+              <h6 className="mb-2">Image :</h6>
+              <img src={blog.image} className="mb-4" height="200px" width="300px"></img>
+              <h6> Description : </h6>
+              {blog.description}
+              <h6 className="mt-4"> Status : </h6>
+              {blog.status}
+              <h6 className="mt-4">Content : </h6>
+              <div dangerouslySetInnerHTML={{ __html: blog.content }}></div>
+            </Grid>
           </Grid>
         </CardContent>
       </Card>
 
-      
+
     </React.Fragment>
   );
 }

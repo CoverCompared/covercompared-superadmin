@@ -82,24 +82,24 @@ function BlogUpdate({ theme, history }, props) {
 
   useEffect(() => {
     BlogService.show(params.id)
-    .then((response) => {
-      if (response.data && response.data.success) {
-        let _form = { ...form };
-        let blog = response.data.data;
-        _form.title.value = _.get(blog, "title", "");
-        _form.description.value = _.get(blog, "description", "");
-        _form.content.value = _.get(blog, "content", "");
-        
-        // _form.image.value = _.get(blog, "image", "");
-        setImageDataUrl(_.get(blog, "image", ""));
+      .then((response) => {
+        if (response.data && response.data.success) {
+          let _form = { ...form };
+          let blog = response.data.data;
+          _form.title.value = _.get(blog, "title", "");
+          _form.description.value = _.get(blog, "description", "");
+          _form.content.value = _.get(blog, "content", "");
 
-        setForm(_form)
-      } else {
+          // _form.image.value = _.get(blog, "image", "");
+          setImageDataUrl(_.get(blog, "image", ""));
+
+          setForm(_form)
+        } else {
+          setNotFound(true);
+        }
+      }).catch(err => {
         setNotFound(true);
-      }
-    }).catch(err => {
-      setNotFound(true);
-    })
+      })
     submitMessage();
   }, [])
 
@@ -111,13 +111,13 @@ function BlogUpdate({ theme, history }, props) {
     bodyFormData.append('status', "draft");
     bodyFormData.append('description', form.description.value);
     bodyFormData.append('content', form.content.value);
-    if(form.image.value){
+    if (form.image.value) {
       bodyFormData.append('image', form.image.value);
     }
 
     try {
       console.log(params.id);
-      let response = await BlogService.update(params.id,bodyFormData);
+      let response = await BlogService.update(params.id, bodyFormData);
       if (response.data.success) {
         console.log(props.history);
         /**
@@ -148,8 +148,8 @@ function BlogUpdate({ theme, history }, props) {
     setForm(_form);
   }
 
-  
-   
+
+
 
   return (
     <React.Fragment>
@@ -166,7 +166,7 @@ function BlogUpdate({ theme, history }, props) {
         <Link exact to="/"> Dashboard </Link>
         <Link exact to="/blogs"> Blogs </Link>
         <Link to={`/blogs/show/${params.id}`} > {form.title.value} </Link>
-        
+
         <Typography>Edit</Typography>
       </Breadcrumbs>
 
@@ -182,7 +182,7 @@ function BlogUpdate({ theme, history }, props) {
             />
 
             <TextField variant="standard" margin="normal" fullWidth
-              label="Description"
+              multiline rows={2} label="Description"
               name="description"
               value={form.description.value} onChange={handleChange}
               onBlur={onBlur}

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { withTheme } from "styled-components";
-import { Card, CardContent, Button, IconButton, InputAdornment, Paper, TextField } from "@material-ui/core";
+import { Card, CardContent, Button, IconButton, InputAdornment, Paper, TextField, TextareaAutosize } from "@material-ui/core";
 import Helmet from 'react-helmet';
 import { InsertPhoto } from "@material-ui/icons";
 import validator from "../../libs/validator";
@@ -50,7 +50,7 @@ function BlogCreate({ theme, history }, props) {
     let _form = { ...form };
     _form[e.target.name].value = e.target.value;
     setForm(_form);
-    
+
   }
 
   const submitMessage = async () => {
@@ -123,8 +123,8 @@ function BlogCreate({ theme, history }, props) {
     setForm(_form);
   }
 
-  
-   
+
+
 
   return (
     <React.Fragment>
@@ -157,6 +157,8 @@ function BlogCreate({ theme, history }, props) {
             />
 
             <TextField variant="standard" margin="normal" fullWidth
+              multiline
+              rows={2}
               label="Description"
               name="description"
               value={form.description.value} onChange={handleChange}

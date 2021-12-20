@@ -104,6 +104,7 @@ function Login(props) {
         <TextField variant="standard" margin="normal" fullWidth
           label="Email Address"
           name="email"
+          autoFocus
           value={form.email.value} onChange={handleChange}
           onBlur={onBlur}
           error={form.email.isTouched === true && validateMessage.email !== undefined}
@@ -130,8 +131,6 @@ function Login(props) {
           }}
         />
 
-        <Link className="forgot-password-link" to={{ pathname: "/forgot-password" }}>Forgot Password</Link>
-
         <Button
           type="submit"
           fullWidth
@@ -142,6 +141,8 @@ function Login(props) {
         >
           {processing ? "Processing..." : "Sign in"}
         </Button>
+        <Link className="forgot-password-link" to={{ pathname: "/forgot-password" }}>Forgot Password</Link>
+
       </form>
     </Wrapper>
   );

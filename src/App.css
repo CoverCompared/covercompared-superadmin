@@ -9,6 +9,7 @@
 .forgot-password-link{
     float: right;
     margin-bottom: 12px;
+    margin-top: 12px;
 }
 
 .back-to-login-link{
@@ -83,19 +84,25 @@
     height: 20px;
     opacity: 0.5;
 }
-.secondary{
-    background: #dc3545;
-    color: white;
+.btn-danger{
+    color: #fff !important;
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
 }
-.secondary:hover {
-    color: black;
+.btn-danger:hover{
+    color: #fff !important;
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
 }
-.primary{
-    background: rgb(23, 105, 170);
-    color: white;
+.btn-primary{
+    color: #fff !important;
+    background-color: #007bff !important;
+    border-color: #007bff !important;
 }
-.primary:hover {
-    color: black;
+.btn-primary:hover {
+    color: #fff !important;
+    background-color: #0069d9 !important;
+    border-color: #0062cc !important;
 }
 .status_btn{
     float: right;
