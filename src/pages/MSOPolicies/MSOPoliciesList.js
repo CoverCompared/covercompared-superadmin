@@ -299,7 +299,7 @@ function MSOPoliciesList({ theme }) {
             <Grid container justify="space-between" spacing={6}>
                 <Grid item>
                     <Typography variant="h3" gutterBottom display="inline">
-                        Covers
+                        MSO Policies
                     </Typography>
                 </Grid>
             </Grid>

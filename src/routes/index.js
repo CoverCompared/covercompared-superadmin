@@ -488,7 +488,7 @@ export const unAuthRoutes = [loginRoute, forgotPasswordRoute,];
 export default [
   dashboardsRoutes,
   coversRoutes,
-  // contactUsRoutes,
+  contactUsRoutes,
   blogsRoutes,
   msoPoliciesRoutes,
   settingsRoute

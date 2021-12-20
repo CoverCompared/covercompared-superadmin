@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import Helmet from 'react-helmet';
 import { useParams } from "react-router-dom";
 import { useSnackbar, withSnackbar } from "notistack";
+import Swal from 'sweetalert2';
 import _ from "lodash";
 import {
   Grid,
@@ -13,13 +14,14 @@ import {
   Card,
   CardContent,
   IconButton,
-  Button
+  Button,
+  Dialog, DialogTitle, DialogActions
 } from "@material-ui/core";
-
+import SweetAlert from 'sweetalert-react';
 import { spacing } from "@material-ui/system";
 import { Link } from "react-router-dom";
 import BlogService from "../../libs/services/blogs";
-import { Edit , Delete } from "@material-ui/icons";
+import { Edit , Delete ,Visibility } from "@material-ui/icons";
 import { func } from "prop-types";
 
 const Divider = styled(MuiDivider)(spacing);
@@ -35,14 +37,17 @@ function BlogShow({ theme } , props) {
   const [notFound, setNotFound] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const history = useHistory();
-
+  const [popup, setPopup] = useState({
+    show: false, // initial values set to false and null
+    id: null,
+  });
   useEffect(() => {
     BlogService.show(params.id)
       .then((response) => {
         if (response.data && response.data.success) {
           setBlog(response.data.data);
           setStatus(response.data.data.status);
-          // console.log(response.data.data);
+          
         } else {
           setNotFound(true);
         }
@@ -59,34 +64,75 @@ function BlogShow({ theme } , props) {
  function deleteBlog(id){
   
   
-  BlogService.delete(id)
-  .then((response) => {
-    if (response.data && response.data.success) {
-        console.log(props.history);
-        enqueueSnackbar(response.data.message, { variant: "success", autoHideDuration: '3s' });
-        history.push('/blogs');
-    } else {
-      let message = response.data.data.image ? response.data.data.image.message : "Something went wrong.";
-      enqueueSnackbar(message, { variant: "error", autoHideDuration: '3s' });
-    }
-  }).catch(err => {
-    setNotFound(true);
-  })
+     BlogService.delete(id)
+      .then((response) => {
+        if (response.data && response.data.success) {
+            console.log(props.history);
+            enqueueSnackbar(response.data.message, { variant: "success", autoHideDuration: '3s' });
+            history.push('/blogs');
+        } else {
+          let message = response.data.data.image ? response.data.data.image.message : "Something went wrong.";
+          enqueueSnackbar(message, { variant: "error", autoHideDuration: '3s' });
+        }
+      }).catch(err => {
+        setNotFound(true);
+      })
+    
  } 
 
+
+
+
+
+const handleDelete = (id) => {
+  Swal.fire({
+    title: 'Are you sure ?',
+    text: "You won't be able to revert this blog!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      deleteBlog(id);
+      // Swal.fire(
+      //   'Deleted!',
+      //   'Your file has been deleted.',
+      //   'success'
+      // )
+    }
+  })
+}
+
+
  function changeStatus(status){
-   alert(status);
+   
   let bodyFormData = new FormData();
     bodyFormData.append('status', status);
-  console.log(bodyFormData);
+  
   BlogService.update(blog._id, bodyFormData)
   .then((response) => {
     if (response.data && response.data.success) {
-        enqueueSnackbar(response.data.message, { variant: "success", autoHideDuration: '3s' });
+      
+        enqueueSnackbar(response.data.message, { variant: "success", autoHideDuration: '2s' });
         setStatus(status);
+        
+        BlogService.show(params.id)
+        .then((response) => {
+          if (response.data && response.data.success) {
+            setBlog(response.data.data);
+            setStatus(response.data.data.status);
+            
+          } else {
+            setNotFound(true);
+          }
+        })
+
     } else {
+      
       let message = response.data.data.image ? response.data.data.image.message : "Something went wrong.";
-      enqueueSnackbar(message, { variant: "error", autoHideDuration: '3s' });
+      enqueueSnackbar(message, { variant: "error", autoHideDuration: '2s' });
     }
   }).catch(err => {
     setNotFound(true);
@@ -110,13 +156,22 @@ function BlogShow({ theme } , props) {
       <Divider  my={6} />
       <Card>    
       
-        <CardContent style={{ float: "right" }}>
+        <CardContent>
+        <div class="button_padding">
+        {_status === "draft" && <Button onClick={() => { changeStatus("published") }} className="ml-2 status_btn" variant="contained" color="primary">Published</Button>}
+        {_status === "published" && <Button onClick={() => { changeStatus("draft") }} className="ml-2 status_btn" variant="contained" color="secondary">Draft</Button>}
+        <Button className="mr-5px status_btn" variant="contained" color="primary"><Visibility /> Preview</Button>
         
-        {_status === "draft" && <Button onClick={() => { changeStatus("published") }} className="ml-2" variant="contained" color="primary">Published</Button>}
-        {_status === "published" && <Button onClick={() => { changeStatus("draft") }} className="ml-2" variant="contained" color="secondary">Draft</Button>}
+        <Button className="button-align-ctm secondary" onClick={() => { handleDelete(blog._id) }} variant="contained" ><Delete /> DELETE</Button>
         
-        <Button className="button-align-ctm" onClick={() => { deleteBlog(blog._id) }} variant="contained" color="primary">Delete</Button>
-        <Button className="button-align-ctm" onClick={() => { history.push(`/blogs/edit/${blog._id}`) }} variant="contained" color="primary">Edit</Button>
+        
+
+        
+        <Button className="button-align-ctm primary" onClick={() => { history.push(`/blogs/edit/${blog._id}`) }} variant="contained" ><Edit /> EDIT</Button>
+        
+        
+
+        </div>
         </CardContent>                                        
       </Card>
       
@@ -141,6 +196,8 @@ function BlogShow({ theme } , props) {
           </Grid>
         </CardContent>
       </Card>
+
+      
     </React.Fragment>
   );
 }

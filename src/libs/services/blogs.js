@@ -5,22 +5,11 @@ import utils from "../utils";
 
 let BlogService = {};
 
-BlogService.table = async ({ from, to, order_field, order_by, q }) => {
-    let queryParams = {
-        range: `[${from},${to}]`
-    };
-
-    let filter = {};
-    if (q) filter['q'] = q;
-
-    if (order_field) queryParams['order_field'] = order_field;
-    if (order_by) queryParams['order_by'] = order_by;
-    if (q) queryParams['q'] = q;
+BlogService.table = async ({ from, to, order_field, order_by, q, ...filter_options }) => {
     
-    if (Object.keys(filter).length) queryParams['filter'] = JSON.stringify(filter);
+    let query_string = utils.filterToQuery({ from, to, order_field, order_by, q, ...filter_options });
     
-    
-    const url = `${API_BASE_URL}/admin/blogs?${utils.objToQuery(queryParams)}`;
+    const url = `${API_BASE_URL}/admin/blogs?${query_string}`;
     const res = await axios({ url });
     console.log(res);
     return res;
@@ -56,6 +45,7 @@ BlogService.update = async (id , data) => {
       headers: { 'content-type': 'multipart/form-data' },
       data
     });
+    console.log(res);
     return res;
   }
 

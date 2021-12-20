@@ -37,13 +37,13 @@ function Login(props) {
     let _form = { ...form };
     _form[e.target.name].isTouched = true;
     setForm(_form);
-    submitMessage()
   }
-
+  
   const handleChange = (e) => {
     let _form = { ...form };
     _form[e.target.name].value = e.target.value;
     setForm(_form);
+    submitMessage()
   }
 
   const submitMessage = async () => {
@@ -57,7 +57,8 @@ function Login(props) {
     submitMessage();
   }, [])
 
-  const submitForm = async () => {
+  const submitForm = async (e) => {
+    e.preventDefault();
     setForm(utils.formTouchAllField({ ...form }));
 
     /**
@@ -98,7 +99,7 @@ function Login(props) {
         Login to your account to continue
       </Typography>
 
-      <form>
+      <form onSubmit={submitForm}>
 
         <TextField variant="standard" margin="normal" fullWidth
           label="Email Address"
@@ -132,12 +133,12 @@ function Login(props) {
         <Link className="forgot-password-link" to={{ pathname: "/forgot-password" }}>Forgot Password</Link>
 
         <Button
+          type="submit"
           fullWidth
           variant="contained"
           color="primary"
           mb={2}
           disabled={Boolean(Object.keys(validateMessage).length) || processing}
-          onClick={submitForm}
         >
           {processing ? "Processing..." : "Sign in"}
         </Button>

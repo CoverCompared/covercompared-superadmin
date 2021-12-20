@@ -90,7 +90,7 @@ function BlogUpdate({ theme, history }, props) {
         _form.description.value = _.get(blog, "description", "");
         _form.content.value = _.get(blog, "content", "");
         
-        _form.image.value = _.get(blog, "image", "");
+        // _form.image.value = _.get(blog, "image", "");
         setImageDataUrl(_.get(blog, "image", ""));
 
         setForm(_form)
@@ -111,11 +111,13 @@ function BlogUpdate({ theme, history }, props) {
     bodyFormData.append('status', "draft");
     bodyFormData.append('description', form.description.value);
     bodyFormData.append('content', form.content.value);
-    bodyFormData.append('image', form.image.value);
+    if(form.image.value){
+      bodyFormData.append('image', form.image.value);
+    }
 
     try {
-
-      let response = await BlogService.update(bodyFormData);
+      console.log(params.id);
+      let response = await BlogService.update(params.id,bodyFormData);
       if (response.data.success) {
         console.log(props.history);
         /**
@@ -163,6 +165,8 @@ function BlogUpdate({ theme, history }, props) {
       <Breadcrumbs aria-label="Breadcrumb" mt={2}>
         <Link exact to="/"> Dashboard </Link>
         <Link exact to="/blogs"> Blogs </Link>
+        <Link to={`/blogs/show/${params.id}`} > {form.title.value} </Link>
+        
         <Typography>Edit</Typography>
       </Breadcrumbs>
 
@@ -175,8 +179,6 @@ function BlogUpdate({ theme, history }, props) {
               name="title"
               value={form.title.value} onChange={handleChange}
               onBlur={onBlur}
-              error={form.title.isTouched === true && validateMessage.title !== undefined}
-              helperText={form.title.isTouched === true ? validateMessage.title : ""}
             />
 
             <TextField variant="standard" margin="normal" fullWidth
@@ -184,8 +186,6 @@ function BlogUpdate({ theme, history }, props) {
               name="description"
               value={form.description.value} onChange={handleChange}
               onBlur={onBlur}
-              error={form.description.isTouched === true && validateMessage.description !== undefined}
-              helperText={form.description.isTouched === true ? validateMessage.description : ""}
             />
 
             <Typography variant="body2" className="mt-2"> Image </Typography>
@@ -220,7 +220,7 @@ function BlogUpdate({ theme, history }, props) {
               disabled={Boolean(Object.keys(validateMessage).length)}
               onClick={submitForm}
             >
-              Add
+              Update
             </Button>
           </form>
         </CardContent>

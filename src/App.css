@@ -55,6 +55,8 @@
 }
 .button-align-ctm{
     margin-left: 4px;
+    float: left;
+
 }
 .text-capitalize{
     text-transform: capitalize;   
@@ -81,3 +83,23 @@
     height: 20px;
     opacity: 0.5;
 }
+.secondary{
+    background: #dc3545;
+    color: white;
+}
+.secondary:hover {
+    color: black;
+}
+.primary{
+    background: rgb(23, 105, 170);
+    color: white;
+}
+.primary:hover {
+    color: black;
+}
+.status_btn{
+    float: right;
+}
+.button_padding {
+    padding-bottom: 29px;
+  }
