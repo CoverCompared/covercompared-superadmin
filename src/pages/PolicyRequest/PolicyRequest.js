@@ -14,7 +14,7 @@ import {
 
 import { spacing } from "@material-ui/system";
 import { Link } from "react-router-dom";
-import ContactService from "../../libs/services/contact";
+import PolicyRequestService from "../../libs/services/policy-equest";
 import utils from "../../libs/utils";
 import { Visibility, Search } from "@material-ui/icons";
 
@@ -49,8 +49,8 @@ class BasicTable extends React.Component {
             };
             if (this.state.q) req['q'] = this.state.q;
             
-            let response = await ContactService.table(req);
-            // console.log(response);
+            let response = await PolicyRequestService.table(req);
+            console.log(response);
             /**
              * TODO: Stop Loader
              */
@@ -148,7 +148,7 @@ class BasicTable extends React.Component {
                             {Array.isArray(this.state.rows) && this.state.rows.length ?
                                 this.state.rows.map((contact, ind) => (<TableRow key={ind}>
                                     <TableCell component="th" scope="row">
-                                        {contact.product_type}
+                                        {contact.name}
                                     </TableCell>
                                     <TableCell component="th" scope="row">
                                         {contact.email}
@@ -179,15 +179,14 @@ class BasicTable extends React.Component {
         )
     };
 }
-
-function ContactUsList({ theme }) {
+function PolicyRequest({ theme }) {
     return (
         <React.Fragment>
             <Helmet title="Default Dashboard" />
             <Grid container justify="space-between" spacing={6}>
                 <Grid item>
                     <Typography variant="h3" gutterBottom display="inline">
-                        Contact Us
+                        Policy Request
                     </Typography>
                 </Grid>
                 <Grid item>
@@ -207,4 +206,4 @@ function ContactUsList({ theme }) {
     );
 }
 
-export default withTheme(ContactUsList);
+export default withTheme(PolicyRequest);

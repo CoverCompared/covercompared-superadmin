@@ -27,6 +27,7 @@ const HomePage = async(() => import("../pages/HomePage"));
 const Settings = async(() => import("../pages/Settings"));
 const ForgotPassword = async(() => import("../pages/ForgotPassword"));
 const ContactUsList = async(() => import("../pages/ContactUs/ContactUsList"));
+const PolicyRequest = async(() => import("../pages/PolicyRequest/PolicyRequest"));
 const BlogsList = async(() => import("../pages/Blogs/BlogList"));
 const BlogShow = async(() => import("../pages/Blogs/BlogShow"));
 const BlogCreate = async(() => import("../pages/Blogs/BlogCreate"));
@@ -107,6 +108,14 @@ const contactUsRoutes = {
   exactMatch: false,
   icon: <ContactMail />,
   component: ContactUsList
+};
+
+const policyRequest = {
+  id: "Policy Request",
+  path: "/policy-request",
+  exactMatch: false,
+  icon: <ContactMail />,
+  component: PolicyRequest
 };
 
 const blogsRoutes = {
@@ -459,6 +468,7 @@ export const dashboard = [
   dashboardsRoutes,
   settingsRoute,
   contactUsRoutes,
+  policyRequest,
   blogsRoutes,
   blogShowRoutes,
   blogCreateRoutes,
@@ -489,6 +499,7 @@ export default [
   dashboardsRoutes,
   coversRoutes,
   contactUsRoutes,
+  policyRequest,
   blogsRoutes,
   msoPoliciesRoutes,
   settingsRoute

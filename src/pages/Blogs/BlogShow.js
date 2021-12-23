@@ -3,9 +3,8 @@ import styled, { withTheme } from "styled-components";
 import { useHistory } from "react-router";
 import Helmet from 'react-helmet';
 import { useParams } from "react-router-dom";
-import { useSnackbar, withSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
 import Swal from 'sweetalert2';
-import _ from "lodash";
 import {
   Grid,
   Divider as MuiDivider,
@@ -13,11 +12,8 @@ import {
   Breadcrumbs,
   Card,
   CardContent,
-  IconButton,
   Button,
-  Dialog, DialogTitle, DialogActions
 } from "@material-ui/core";
-import SweetAlert from 'sweetalert-react';
 import { spacing } from "@material-ui/system";
 import { Link } from "react-router-dom";
 import BlogService from "../../libs/services/blogs";
@@ -35,12 +31,9 @@ function BlogShow({ theme }, props) {
   const [blog, setBlog] = useState({});
   const [_status, setStatus] = useState({});
   const [notFound, setNotFound] = useState(false);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
-  const [popup, setPopup] = useState({
-    show: false, // initial values set to false and null
-    id: null,
-  });
+
   useEffect(() => {
     BlogService.show(params.id)
       .then((response) => {
@@ -138,6 +131,10 @@ function BlogShow({ theme }, props) {
         setNotFound(true);
       })
   }
+  
+  const openBlog = () => {
+    window.open(`${window.location.origin}/blogs/${blog.slug}`, '_blank').focus()
+  }
 
   return (
     <React.Fragment>
@@ -160,11 +157,11 @@ function BlogShow({ theme }, props) {
           <div class="button_padding">
             {_status === "draft" && <Button onClick={() => { changeStatus("published") }} className="ml-2 float-right" variant="contained" color="primary">Published</Button>}
             {_status === "published" && <Button onClick={() => { changeStatus("draft") }} className="ml-2 float-right" variant="contained" color="secondary">Draft</Button>}
-            <Button className="mr-5px float-right" variant="contained" color="primary"><Visibility /> Preview</Button>
+            {/* <Button className="mr-5px float-right" variant="contained" color="primary"><Visibility fontSize="small"/> Preview</Button> */}
+            {_status === "published" && <Button onClick={() => { openBlog() }} className="mr-5px float-right" variant="contained" color="secondary"><Visibility fontSize="small" /> Preview</Button>}
 
-            <Button className="button-align-ctm btn-danger" onClick={() => { handleDelete(blog._id) }} variant="contained" ><Delete /> DELETE</Button>
-            <Button className="button-align-ctm btn-primary " onClick={() => { history.push(`/blogs/edit/${blog._id}`) }} variant="contained" ><Edit /> EDIT</Button>
-
+            <Button className="button-align-ctm btn-danger" onClick={() => { handleDelete(blog._id) }} variant="contained" ><Delete fontSize="small" /> DELETE</Button>
+            <Button className="button-align-ctm btn-primary" onClick={() => { history.push(`/blogs/edit/${blog._id}`) }} variant="contained" ><Edit fontSize="small" /> EDIT</Button>
           </div>
         </CardContent>
       </Card>

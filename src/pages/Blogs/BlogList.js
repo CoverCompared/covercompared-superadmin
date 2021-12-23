@@ -2,7 +2,7 @@ import React from "react";
 import styled, { withTheme } from "styled-components";
 
 import Helmet from 'react-helmet';
-import _ from "lodash";
+
 
 import {
     Grid,
@@ -10,8 +10,7 @@ import {
     Typography as MuiTypography,
     Button,
     InputAdornment,
-    TextField,
-    Breadcrumbs, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody, TablePagination, IconButton
+    TextField, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody, TablePagination, IconButton
 } from "@material-ui/core";
 
 import { spacing } from "@material-ui/system";
@@ -58,7 +57,8 @@ class BasicTable extends React.Component {
              */
 
             if (response.data.success) {
-                this.setState(utils.convertPaginationResponse(response))
+                this.setState(utils.convertPaginationResponse(response));
+                
             }
         } catch (error) {
             /**

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { withTheme } from "styled-components";
-import { Card, CardContent, Button, IconButton, InputAdornment, Paper, TextField } from "@material-ui/core";
+import { Card, CardContent, Button,TextField } from "@material-ui/core";
 import Helmet from 'react-helmet';
 import { useParams } from "react-router-dom";
 import { InsertPhoto } from "@material-ui/icons";
@@ -8,7 +8,7 @@ import validator from "../../libs/validator";
 import utils from "../../libs/utils";
 import 'react-quill/dist/quill.snow.css';
 import BlogService from "../../libs/services/blogs";
-import { useSnackbar, withSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
 import { withRouter } from "react-router";
 
 import {
@@ -29,7 +29,7 @@ const Typography = styled(MuiTypography)(spacing);
 
 function BlogUpdate({ theme, history }, props) {
 
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const [imageDataUrl, setImageDataUrl] = useState(undefined);
   const fileInput = useRef(null);
   const [form, setForm] = useState({
@@ -41,7 +41,6 @@ function BlogUpdate({ theme, history }, props) {
 
   const [validateMessage, setValidateMessage] = useState({});
   const params = useParams();
-  const [blog, setBlog] = useState({});
   const [notFound, setNotFound] = useState(false);
 
   const onBlur = (e) => {

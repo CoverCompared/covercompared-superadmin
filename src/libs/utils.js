@@ -101,7 +101,7 @@ utils.convertPaginationResponse = (response) => {
         to: _.get(response.data.data.range.split("/"), "0", 0).split("-")[1],
         total: _.get(response.data.data.range.split("/"), "1", 0)
     };
-
+    
     return {
         total_records: range.total,
         current_page: (range.to / (range.to - range.from)) - 1,

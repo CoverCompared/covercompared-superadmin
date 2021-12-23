@@ -126,13 +126,21 @@ function PaymentDetail({ cover }) {
   </Grid>
 }
 
-function CryptoPaymentDetails({ payment }) {
+function CryptoPaymentDetails({ cover }) {
+  const { payment } = cover;
   return <Grid item lg={6} xs={12}>
     <Card>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div"> Crypto Transaction Details</Typography>
         <Divider className="mb-3" />
         <div>
+          {
+            (cover.product_type === "device_insurance" && cover.details)&&
+            <FormControl className="m-2">
+              <FormLabel>Product ID</FormLabel>
+              <Typography >{cover.details.contract_product_id}</Typography>
+            </FormControl>
+          }
           <FormControl className="m-2">
             <FormLabel>Blockchain</FormLabel>
             <Typography >{payment.blockchain}</Typography>
@@ -259,7 +267,7 @@ function DeviceInsuranceDetails({ cover }) {
       </Grid>
     }
     <PaymentDetail cover={cover} />
-    {cover.payment && <CryptoPaymentDetails payment={cover.payment} />}
+    {cover.payment && <CryptoPaymentDetails cover={cover} />}
     {cover.reviews && <ReviewRating review={cover.reviews} />}
   </Grid>)
 }
@@ -359,7 +367,7 @@ function MSOPolicyDetails({ cover }) {
       </Grid>
     }
     <PaymentDetail cover={cover} />
-    {cover.payment && <CryptoPaymentDetails payment={cover.payment} />}
+    {cover.payment && <CryptoPaymentDetails cover={cover} />}
     {cover.reviews && <ReviewRating review={cover.reviews} />}
   </Grid>)
 }
@@ -465,7 +473,7 @@ function SmartContractDetails({ cover }) {
         </Card>
       </Grid>
     }
-    {cover.payment && <CryptoPaymentDetails payment={cover.payment} />}
+    {cover.payment && <CryptoPaymentDetails cover={cover} />}
     {cover.reviews && <ReviewRating review={cover.reviews} />}
   </Grid>)
 }
