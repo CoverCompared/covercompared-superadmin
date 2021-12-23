@@ -108,7 +108,6 @@ function BlogUpdate({ theme, history }, props) {
 
     let bodyFormData = new FormData();
     bodyFormData.append('title', form.title.value);
-    bodyFormData.append('status', "draft");
     bodyFormData.append('description', form.description.value);
     bodyFormData.append('content', form.content.value);
     if (form.image.value) {
