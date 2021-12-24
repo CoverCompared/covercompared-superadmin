@@ -50,7 +50,7 @@ class BasicTable extends React.Component {
             if (this.state.q) req['q'] = this.state.q;
             
             let response = await PolicyRequestService.table(req);
-            console.log(response);
+          
             /**
              * TODO: Stop Loader
              */
@@ -136,28 +136,26 @@ class BasicTable extends React.Component {
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Name</TableCell>
                                 <TableCell>Email</TableCell>
-                                <TableCell align="right">User Type</TableCell>
+                                <TableCell>Country</TableCell>
+                                <TableCell align="right">Product Type</TableCell>
                                 <TableCell align="right">Created Date</TableCell>
-                                <TableCell className="text-right">View</TableCell>
+                                
                             </TableRow>
                         </TableHead>
                         <TableBody>
 
                             {Array.isArray(this.state.rows) && this.state.rows.length ?
-                                this.state.rows.map((contact, ind) => (<TableRow key={ind}>
+                                this.state.rows.map((policy, ind) => (<TableRow key={ind}>
                                     <TableCell component="th" scope="row">
-                                        {contact.name}
+                                        {policy.email}
                                     </TableCell>
                                     <TableCell component="th" scope="row">
-                                        {contact.email}
+                                        {policy.country}
                                     </TableCell>
-                                    <TableCell className="contact-status" align="right">{contact.user_type}</TableCell>
-                                    <TableCell align="right">{this.getFormatedDate(contact.createdAt)}</TableCell>
-                                    <TableCell className="text-right">
-                                        <IconButton onClick={() => { this.showMsg(contact.message) }}> <Visibility /> </IconButton>
-                                        </TableCell>
+                                    <TableCell className="policy-status" align="right">{policy.product_type}</TableCell>
+                                    <TableCell align="right">{this.getFormatedDate(policy.createdAt)}</TableCell>
+                                    
                                 </TableRow>)) :
                                 <TableRow>
                                     <TableCell>No data found.</TableCell>

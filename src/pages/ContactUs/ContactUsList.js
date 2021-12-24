@@ -93,7 +93,6 @@ class BasicTable extends React.Component {
         
         Swal.fire({
             title: '<strong>Contact Message</strong>',
-            icon: 'info',
             html:
               message,
             showCloseButton: true

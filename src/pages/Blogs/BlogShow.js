@@ -19,6 +19,8 @@ import { Link } from "react-router-dom";
 import BlogService from "../../libs/services/blogs";
 import { Edit, Delete, Visibility } from "@material-ui/icons";
 import { func } from "prop-types";
+import { BASE_URL } from "../../libs/config";
+
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -133,7 +135,7 @@ function BlogShow({ theme }, props) {
   }
   
   const openBlog = () => {
-    window.open(`${window.location.origin}/blogs/${blog.slug}`, '_blank').focus()
+    window.open(`${BASE_URL}/blogs/${blog.slug}`, '_blank').focus()
   }
 
   return (

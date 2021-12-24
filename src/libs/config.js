@@ -1,5 +1,6 @@
 let env;
 let baseURL;
+let previewURL;
 let firebaseConfig;
 const productionHostname = 'covercompared.polkacover.com';
 const stagingHostname = 'staging-covercompared.polkacover.com';
@@ -7,12 +8,15 @@ const stagingHostname = 'staging-covercompared.polkacover.com';
 if (window.location.hostname === productionHostname) {
   env = 'production';
   baseURL = 'https://covercompared.polkacover.com/api';
+  previewURL = 'https://covercompared.polkacover.com';
 } else if (window.location.hostname === stagingHostname) {
   env = 'staging';
   baseURL = 'https://staging-covercompared.polkacover.com/api';
+  previewURL = 'https://staging-covercompared.polkacover.com';
 } else {
   env = 'local';
   baseURL = 'http://localhost:3006/api';
+  previewURL = 'http://localhost:3006';
   // baseURL = 'https://staging-covercompared.polkacover.com/api';
 }
 
@@ -38,4 +42,5 @@ if (env === "local") {
 
 export const ENV = env;
 export const API_BASE_URL = baseURL;
+export const BASE_URL = previewURL;
 export const FIREBASE_CONFIG = firebaseConfig;

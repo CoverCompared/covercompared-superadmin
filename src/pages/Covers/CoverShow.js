@@ -135,7 +135,7 @@ function CryptoPaymentDetails({ cover }) {
         <Divider className="mb-3" />
         <div>
           {
-            (cover.product_type === "device_insurance" && cover.details)&&
+            (["device_insurance", "mso_policy"].includes(cover.product_type) && cover.details)&&
             <FormControl className="m-2">
               <FormLabel>Product ID</FormLabel>
               <Typography >{cover.details.contract_product_id}</Typography>
