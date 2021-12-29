@@ -146,9 +146,7 @@ class BasicTable extends React.Component {
 
                             {Array.isArray(this.state.rows) && this.state.rows.length ?
                                 this.state.rows.map((contact, ind) => (<TableRow key={ind}>
-                                    <TableCell component="th" scope="row">
-                                        {contact.name}
-                                    </TableCell>
+                                    <TableCell component="th" scope="row"> {contact["name"]} </TableCell>
                                     <TableCell component="th" scope="row">
                                         {contact.email}
                                     </TableCell>
