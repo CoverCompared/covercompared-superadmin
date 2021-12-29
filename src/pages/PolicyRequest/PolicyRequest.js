@@ -2,6 +2,8 @@ import React from "react";
 import styled, { withTheme } from "styled-components";
 import Swal from 'sweetalert2';
 import Helmet from 'react-helmet';
+import countryList from  "react-select-country-list";
+import { PRODUCT_TYPE_NAMES } from "../../libs/constants";
 
 import {
     Grid,
@@ -151,9 +153,11 @@ class BasicTable extends React.Component {
                                         {policy.email}
                                     </TableCell>
                                     <TableCell component="th" scope="row">
-                                        {policy.country}
+                                        {countryList().getLabel(policy.country) ? countryList().getLabel(policy.country) : policy.country}
                                     </TableCell>
-                                    <TableCell className="policy-status" align="right">{policy.product_type}</TableCell>
+                                    <TableCell className="policy-status" align="right">
+                                        {PRODUCT_TYPE_NAMES[policy.product_type]}
+                                    </TableCell>
                                     <TableCell align="right">{this.getFormatedDate(policy.createdAt)}</TableCell>
                                     
                                 </TableRow>)) :

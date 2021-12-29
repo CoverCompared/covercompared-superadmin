@@ -147,7 +147,7 @@ class BasicTable extends React.Component {
                             {Array.isArray(this.state.rows) && this.state.rows.length ?
                                 this.state.rows.map((contact, ind) => (<TableRow key={ind}>
                                     <TableCell component="th" scope="row">
-                                        {contact.product_type}
+                                        {contact.name}
                                     </TableCell>
                                     <TableCell component="th" scope="row">
                                         {contact.email}
@@ -156,7 +156,7 @@ class BasicTable extends React.Component {
                                     <TableCell align="right">{this.getFormatedDate(contact.createdAt)}</TableCell>
                                     <TableCell className="text-right">
                                         <IconButton onClick={() => { this.showMsg(contact.message) }}> <Visibility /> </IconButton>
-                                        </TableCell>
+                                    </TableCell>
                                 </TableRow>)) :
                                 <TableRow>
                                     <TableCell>No data found.</TableCell>
