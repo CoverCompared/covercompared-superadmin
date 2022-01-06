@@ -20,13 +20,14 @@ import {
   Users,
   Settings as SettingsIcon
 } from "react-feather";
-import { ContactMail, DescriptionOutlined, VerticalSplit } from "@material-ui/icons";
+import { ContactMail, DescriptionOutlined, Notifications, SentimentDissatisfiedOutlined, VerticalSplit } from "@material-ui/icons";
 import MSOIcon from "../assets/mso.svg";
 
 const HomePage = async(() => import("../pages/HomePage"));
 const Settings = async(() => import("../pages/Settings"));
 const ForgotPassword = async(() => import("../pages/ForgotPassword"));
 const ContactUsList = async(() => import("../pages/ContactUs/ContactUsList"));
+const SubscriptionList = async(() => import("../pages/Subscription/SubscriptionList"));
 const PolicyRequest = async(() => import("../pages/PolicyRequest/PolicyRequest"));
 const BlogsList = async(() => import("../pages/Blogs/BlogList"));
 const BlogShow = async(() => import("../pages/Blogs/BlogShow"));
@@ -110,11 +111,19 @@ const contactUsRoutes = {
   component: ContactUsList
 };
 
+const subscriptionRoutes = {
+  id: "Subscription",
+  path: "/subscription",
+  exactMatch: false,
+  icon: <Notifications />,
+  component: SubscriptionList
+};
+
 const policyRequest = {
   id: "Policy Request",
   path: "/policy-request",
   exactMatch: false,
-  icon: <ContactMail />,
+  icon: <SentimentDissatisfiedOutlined />,
   component: PolicyRequest
 };
 
@@ -468,6 +477,7 @@ export const dashboard = [
   dashboardsRoutes,
   settingsRoute,
   contactUsRoutes,
+  subscriptionRoutes,
   policyRequest,
   blogsRoutes,
   blogShowRoutes,
@@ -499,6 +509,7 @@ export default [
   dashboardsRoutes,
   coversRoutes,
   contactUsRoutes,
+  subscriptionRoutes,
   policyRequest,
   blogsRoutes,
   msoPoliciesRoutes,

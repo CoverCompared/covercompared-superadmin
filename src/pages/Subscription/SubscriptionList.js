@@ -14,7 +14,7 @@ import {
 
 import { spacing } from "@material-ui/system";
 import { Link } from "react-router-dom";
-import ContactService from "../../libs/services/contact";
+import SubscriptionService from "../../libs/services/subscription";
 import utils from "../../libs/utils";
 import { Visibility, Search } from "@material-ui/icons";
 
@@ -49,8 +49,8 @@ class BasicTable extends React.Component {
             };
             if (this.state.q) req['q'] = this.state.q;
             
-            let response = await ContactService.table(req);
-            // console.log(response);
+            let response = await SubscriptionService.table(req);
+            console.log(response);
             /**
              * TODO: Stop Loader
              */
@@ -89,8 +89,8 @@ class BasicTable extends React.Component {
         return formateDate;
 
     }
+
     showMsg = (message) =>{
-        
         Swal.fire({
             title: '<strong>Contact Message</strong>',
             html:
@@ -98,8 +98,6 @@ class BasicTable extends React.Component {
             showCloseButton: true
           })
     }
-
-    
 
     render() {
         
@@ -137,24 +135,24 @@ class BasicTable extends React.Component {
                             <TableRow>
                                 <TableCell>Name</TableCell>
                                 <TableCell>Email</TableCell>
-                                <TableCell align="right">User Type</TableCell>
-                                <TableCell align="right">Created Date</TableCell>
-                                <TableCell className="text-right">View</TableCell>
+                                <TableCell align="right">Status</TableCell>
+                                <TableCell align="right">Updated Date</TableCell>
+                                
                             </TableRow>
                         </TableHead>
                         <TableBody>
 
                             {Array.isArray(this.state.rows) && this.state.rows.length ?
-                                this.state.rows.map((contact, ind) => (<TableRow key={ind}>
-                                    <TableCell component="th" scope="row"> {contact["name"]} </TableCell>
+                                this.state.rows.map((subscription, ind) => (<TableRow key={ind}>
                                     <TableCell component="th" scope="row">
-                                        {contact.email}
+                                        {subscription.name}
                                     </TableCell>
-                                    <TableCell className="contact-status text-capitalize" align="right">{contact.user_type}</TableCell>
-                                    <TableCell align="right">{this.getFormatedDate(contact.createdAt)}</TableCell>
-                                    <TableCell className="text-right">
-                                        <IconButton onClick={() => { this.showMsg(contact.message) }}> <Visibility /> </IconButton>
+                                    <TableCell component="th" scope="row">
+                                        {subscription.email}
                                     </TableCell>
+                                    <TableCell className="subscription-status text-capitalize" align="right">{(subscription.status == null)?"-":subscription.status}</TableCell>
+                                    <TableCell align="right">{this.getFormatedDate(subscription.updatedAt)}</TableCell>
+                                    
                                 </TableRow>)) :
                                 <TableRow>
                                     <TableCell>No data found.</TableCell>
@@ -177,14 +175,14 @@ class BasicTable extends React.Component {
     };
 }
 
-function ContactUsList({ theme }) {
+function SubscriptionList({ theme }) {
     return (
         <React.Fragment>
             <Helmet title="Default Dashboard" />
             <Grid container justify="space-between" spacing={6}>
                 <Grid item>
                     <Typography variant="h3" gutterBottom display="inline">
-                        Contact Us
+                        Subscription List
                     </Typography>
                 </Grid>
                 <Grid item>
@@ -204,4 +202,4 @@ function ContactUsList({ theme }) {
     );
 }
 
-export default withTheme(ContactUsList);
+export default withTheme(SubscriptionList);

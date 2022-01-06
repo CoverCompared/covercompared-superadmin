@@ -174,6 +174,16 @@ function CryptoPaymentDetails({ cover }) {
             <Typography >{utils.getFormattedDateTime(payment.createdAt)}</Typography>
           </FormControl>
         </div>
+        <div>
+          <FormControl className="m-2">
+            <FormLabel>View on block explorer</FormLabel>
+            <Typography ><a href={payment.transaction_link} target="_blank">{payment.transaction_link}</a></Typography>
+          </FormControl>
+          <FormControl className="m-2">
+            <FormLabel>Network</FormLabel>
+            <Typography >{payment.network_name}</Typography>
+          </FormControl>
+        </div>
       </CardContent>
     </Card>
   </Grid>
