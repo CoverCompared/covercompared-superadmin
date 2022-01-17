@@ -13,3 +13,10 @@ export function setProfile(value){
     payload: value
   }
 }
+
+export function setLoader(value){
+  return {
+    type: types.SET_LOADER,
+    payload: value
+  }
+}

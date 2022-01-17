@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import _ from "lodash";
-import { Button, FormControl, IconButton, Input, InputAdornment, InputLabel, Paper, TextField, Typography } from "@material-ui/core";
+import { Button, IconButton, InputAdornment, Paper, TextField, Typography } from "@material-ui/core";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
@@ -8,6 +7,10 @@ import validator from "./../libs/validator";
 import utils from "../libs/utils";
 import AuthService from "./../libs/services/auth";
 import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
+import { useSnackbar, withSnackbar } from "notistack";
+import { setLoader } from "../redux/actions/themeActions";
+import { connect } from "react-redux";
 
 const Wrapper = styled(Paper)`
   padding: ${props => props.theme.spacing(6)}px;
@@ -20,6 +23,8 @@ const Wrapper = styled(Paper)`
 function Login(props) {
 
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const [form, setForm] = useState({
     email: { value: "", rules: ["required"] },
@@ -32,13 +37,13 @@ function Login(props) {
     let _form = { ...form };
     _form[e.target.name].isTouched = true;
     setForm(_form);
-    submitMessage()
   }
-
+  
   const handleChange = (e) => {
     let _form = { ...form };
     _form[e.target.name].value = e.target.value;
     setForm(_form);
+    submitMessage()
   }
 
   const submitMessage = async () => {
@@ -48,28 +53,42 @@ function Login(props) {
     setValidateMessage(messages);
   }
 
-  useEffect(() => { submitMessage() }, [])
+  useEffect(() => {
+    submitMessage();
+  }, [])
 
-  const submitForm = async () => {
+  const submitForm = async (e) => {
+    e.preventDefault();
     setForm(utils.formTouchAllField({ ...form }));
 
     /**
      * TODO: Start Loader
      */
+    setProcessing(true);
 
     try {
       let data = await AuthService.login(form.email.value, form.password.value);
       if (data.status) {
         /**
-         * TODO: Stop loader & Toast Message "Login successfully."
+         * TODO: Stop loader
          */
-        props.history.push(`${process.env.PUBLIC_URL}/`);
+         setProcessing(false);
+        props.history.push(`/`);
+        enqueueSnackbar(data.message, { variant: "success", autoHideDuration: '3s' });
       } else {
+        /**
+         * TODO: Stop loader
+         */
+         setProcessing(false);
         setValidateMessage({ email: data.message, password: "" });
       }
     }
     catch (e) {
-      console.log("Error", e);
+      /**
+       * TODO: Stop loader
+       */
+       setProcessing(false);
+      enqueueSnackbar("Something went wrong.", { variant: "error", autoHideDuration: '3s' });
     }
   }
 
@@ -80,11 +99,12 @@ function Login(props) {
         Login to your account to continue
       </Typography>
 
-      <form>
+      <form onSubmit={submitForm}>
 
         <TextField variant="standard" margin="normal" fullWidth
           label="Email Address"
           name="email"
+          autoFocus
           value={form.email.value} onChange={handleChange}
           onBlur={onBlur}
           error={form.email.isTouched === true && validateMessage.email !== undefined}
@@ -112,18 +132,20 @@ function Login(props) {
         />
 
         <Button
+          type="submit"
           fullWidth
           variant="contained"
           color="primary"
           mb={2}
-          disabled={Boolean(Object.keys(validateMessage).length)}
-          onClick={submitForm}
+          disabled={Boolean(Object.keys(validateMessage).length) || processing}
         >
-          Sign in
+          {processing ? "Processing..." : "Sign in"}
         </Button>
+        <Link className="forgot-password-link" to={{ pathname: "/forgot-password" }}>Forgot Password</Link>
+
       </form>
     </Wrapper>
   );
 }
 
-export default withRouter(Login);
+export default connect()(withRouter(Login));

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Helmet from 'react-helmet';
 
 import DateFnsUtils from "@date-io/date-fns";
@@ -14,6 +14,7 @@ import { ThemeProvider } from "styled-components";
 import maTheme from "./theme";
 import Routes from "./routes/Routes";
 import AxiosInterceptor from "./libs/services/interceptor";
+import { CircularProgress } from "@material-ui/core";
 
 function App({ theme }) {
   const [interceptor, setInterceptor] = useState(0);
@@ -28,8 +29,8 @@ function App({ theme }) {
     interceptor ?
       <React.Fragment >
         <Helmet
-          titleTemplate="%s | Material App"
-          defaultTitle="Material App - React Admin & Dashboard Template"
+          titleTemplate="%s | Cover Compared"
+          defaultTitle="Cover Compared"
         />
         <StylesProvider injectFirst>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -40,6 +41,13 @@ function App({ theme }) {
             </MuiThemeProvider>
           </MuiPickersUtilsProvider>
         </StylesProvider>
+        {
+          theme.loader &&
+          <div className="circle-loader">
+            <CircularProgress color="primary" />
+          </div>
+        }
+
       </React.Fragment>
       : <></>
   );

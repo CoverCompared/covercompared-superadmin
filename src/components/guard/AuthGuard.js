@@ -17,7 +17,7 @@ class AuthGuard extends React.Component {
                 let user = await AuthService.getProfile(true);
                 let status = this.state.status;
                 if (!user) {
-                    this.props.history.push(`${process.env.PUBLIC_URL}/login`);
+                    this.props.history.push(`/login`);
                 } else {
                     status = true;
                 }
@@ -26,7 +26,7 @@ class AuthGuard extends React.Component {
                 });
                 return;
             } catch (error) {
-                this.props.history.push(`${process.env.PUBLIC_URL}/login`);
+                this.props.history.push(`/login`);
             }
         } else {
             this.setState({ status: true });

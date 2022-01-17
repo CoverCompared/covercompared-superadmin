@@ -54,7 +54,7 @@ function Footer() {
         {/* <Grid container item xs={12} md={6} justify="flex-end">
           <List>
             <ListItem>
-              <ListItemText primary={`© ${new Date().getFullYear()} - Material App`} />
+              <ListItemText primary={`© ${new Date().getFullYear()} - Cover Compared`} />
             </ListItem>
           </List>
         </Grid> */}

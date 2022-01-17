@@ -17,10 +17,25 @@ import {
   PieChart,
   Sliders,
   User,
-  Users
+  Users,
+  Settings as SettingsIcon
 } from "react-feather";
+import { ContactMail, DescriptionOutlined, Notifications, SentimentDissatisfiedOutlined, VerticalSplit } from "@material-ui/icons";
+import MSOIcon from "../assets/mso.svg";
 
 const HomePage = async(() => import("../pages/HomePage"));
+const Settings = async(() => import("../pages/Settings"));
+const ForgotPassword = async(() => import("../pages/ForgotPassword"));
+const ContactUsList = async(() => import("../pages/ContactUs/ContactUsList"));
+const SubscriptionList = async(() => import("../pages/Subscription/SubscriptionList"));
+const PolicyRequest = async(() => import("../pages/PolicyRequest/PolicyRequest"));
+const BlogsList = async(() => import("../pages/Blogs/BlogList"));
+const BlogShow = async(() => import("../pages/Blogs/BlogShow"));
+const BlogCreate = async(() => import("../pages/Blogs/BlogCreate"));
+const BlogUpdate = async(() => import("../pages/Blogs/BlogUpdate"));
+const CoverList = async(() => import("../pages/Covers/CoverList"));
+const CoverShow = async(() => import("../pages/Covers/CoverShow"));
+const MSOPoliciesList = async(() => import("../pages/MSOPolicies/MSOPoliciesList"));
 
 // Auth components
 const SignIn = async(() => import("../pages/auth/SignIn"));
@@ -63,7 +78,7 @@ const Blank = async(() => import("../pages/pages/Blank"));
 const Invoice = async(() => import("../pages/pages/Invoice"));
 const Pricing = async(() => import("../pages/pages/Pricing"));
 const Profile = async(() => import("../pages/pages/Profile"));
-const Settings = async(() => import("../pages/pages/Settings"));
+const PageSettings = async(() => import("../pages/pages/Settings"));
 const Tasks = async(() => import("../pages/pages/Tasks"));
 const Projects = async(() => import("../pages/pages/Projects"));
 const Calendar = async(() => import("../pages/pages/Calendar"));
@@ -88,6 +103,88 @@ const dashboardsRoutes = {
   component: HomePage
 };
 
+const contactUsRoutes = {
+  id: "Contact Us",
+  path: "/contact-us",
+  exactMatch: false,
+  icon: <ContactMail />,
+  component: ContactUsList
+};
+
+const subscriptionRoutes = {
+  id: "Subscription",
+  path: "/subscription",
+  exactMatch: false,
+  icon: <Notifications />,
+  component: SubscriptionList
+};
+
+const policyRequest = {
+  id: "Policy Request",
+  path: "/policy-request",
+  exactMatch: false,
+  icon: <SentimentDissatisfiedOutlined />,
+  component: PolicyRequest
+};
+
+const blogsRoutes = {
+  id: "Blogs",
+  path: "/blogs",
+  exactMatch: false,
+  icon: <VerticalSplit />,
+  component: BlogsList
+};
+
+const blogShowRoutes = {
+  id: "Blogs",
+  path: "/blogs/show/:id",
+  exactMatch: false,
+  icon: <VerticalSplit />,
+  component: BlogShow
+};
+
+
+const coversRoutes = {
+  id: "Covers",
+  path: "/covers",
+  exactMatch: false,
+  icon: <DescriptionOutlined />,
+  component: CoverList
+};
+
+const msoPoliciesRoutes = {
+  id: "MSO Policies",
+  path: "/mso-policies",
+  exactMatch: false,
+  icon: <img className="sidebar-icon" src={MSOIcon} />,
+  component: MSOPoliciesList
+};
+
+const coverShowRoutes = {
+  id: "Covers",
+  path: "/covers/show/:id",
+  exactMatch: false,
+  icon: <DescriptionOutlined />,
+  component: CoverShow
+};
+
+const blogCreateRoutes = {
+  id: "Blogs",
+  path: "/blogs/create",
+  exactMatch: false,
+  icon: <VerticalSplit />,
+  component: BlogCreate
+};
+
+const blogUpdateRoutes = {
+  id: "Blogs",
+  path: "/blogs/edit/:id",
+  exactMatch: false,
+  icon: <VerticalSplit />,
+  component: BlogUpdate
+};
+
+
 const pagesRoutes = {
   id: "Pages",
   path: "/pages",
@@ -96,7 +193,7 @@ const pagesRoutes = {
     {
       path: "/pages/settings",
       name: "Settings",
-      component: Settings
+      component: PageSettings
     },
     {
       path: "/pages/pricing",
@@ -360,8 +457,35 @@ const loginRoute = {
   children: null
 }
 
+const settingsRoute = {
+  id: "Settings",
+  path: "/settings",
+  exactMatch: false,
+  icon: <SettingsIcon />,
+  component: Settings,
+  children: null
+}
+
+const forgotPasswordRoute = {
+  id: "ForgotPassword",
+  path: "/forgot-password",
+  component: ForgotPassword,
+  children: null
+}
+
 export const dashboard = [
   dashboardsRoutes,
+  settingsRoute,
+  contactUsRoutes,
+  subscriptionRoutes,
+  policyRequest,
+  blogsRoutes,
+  blogShowRoutes,
+  blogCreateRoutes,
+  blogUpdateRoutes,
+  coversRoutes,
+  coverShowRoutes,
+  msoPoliciesRoutes,
   pagesRoutes,
   profileRoutes,
   projectsRoutes,
@@ -379,6 +503,15 @@ export const dashboard = [
 
 export const auth = [authRoutes];
 
-export const unAuthRoutes = [loginRoute];
+export const unAuthRoutes = [loginRoute, forgotPasswordRoute,];
 
-export default [dashboardsRoutes];
+export default [
+  dashboardsRoutes,
+  coversRoutes,
+  contactUsRoutes,
+  subscriptionRoutes,
+  policyRequest,
+  blogsRoutes,
+  msoPoliciesRoutes,
+  settingsRoute
+];
