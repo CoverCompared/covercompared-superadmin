@@ -2,13 +2,13 @@ let env;
 let baseURL;
 let previewURL;
 let firebaseConfig;
-const productionHostname = 'covercompared.polkacover.com';
+const productionHostname = 'app.covercompared.com';
 const stagingHostname = 'staging-covercompared.polkacover.com';
 
 if (window.location.hostname === productionHostname) {
   env = 'production';
-  baseURL = 'https://covercompared.polkacover.com/api';
-  previewURL = 'https://covercompared.polkacover.com';
+  baseURL = 'https://app.covercompared.com/api';
+  previewURL = 'https://app.covercompared.com';
 } else if (window.location.hostname === stagingHostname) {
   env = 'staging';
   baseURL = 'https://staging-covercompared.polkacover.com/api';
