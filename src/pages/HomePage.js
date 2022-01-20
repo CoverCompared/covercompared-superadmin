@@ -33,7 +33,7 @@ function Stats({ title, total, active, pending, cancelled, complete, icon }) {
         <div className="row">
           <div className="col">
             <Typography variant="h6" mb={4}>{title}</Typography>
-            <Typography variant="h3" mb={3}><Box fontWeight="fontWeightRegular">{total}</Box></Typography>
+            <Typography variant="h3" mb={3}><Box fontWeight="fontWeightRegular">{active}</Box></Typography>
           </div>
           <div className="col-auto">
             <img className="dash-count-icon" src={icon} />
@@ -44,6 +44,7 @@ function Stats({ title, total, active, pending, cancelled, complete, icon }) {
         <div className="dash-sub-count">Pending <span>{pending}</span></div>
         <div className="dash-sub-count">Cancelled <span>{cancelled}</span></div>
         <div className="dash-sub-count">Complete <span>{complete}</span></div>
+        <div className="dash-sub-count text-uppercase">Total <span>{total}</span></div>
       </CardContent>
     </Card>
   );
