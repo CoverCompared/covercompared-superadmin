@@ -133,7 +133,7 @@ class BasicTable extends React.Component {
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Name</TableCell>
+                                {/* <TableCell>Name</TableCell> */}
                                 <TableCell>Email</TableCell>
                                 <TableCell align="right">Status</TableCell>
                                 <TableCell align="right">Updated Date</TableCell>
@@ -144,9 +144,9 @@ class BasicTable extends React.Component {
 
                             {Array.isArray(this.state.rows) && this.state.rows.length ?
                                 this.state.rows.map((subscription, ind) => (<TableRow key={ind}>
-                                    <TableCell component="th" scope="row">
+                                    {/* <TableCell component="th" scope="row">
                                         {subscription.name}
-                                    </TableCell>
+                                    </TableCell> */}
                                     <TableCell component="th" scope="row">
                                         {subscription.email}
                                     </TableCell>

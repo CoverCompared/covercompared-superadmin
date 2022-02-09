@@ -167,7 +167,7 @@ function CryptoPaymentDetails({ cover }) {
         <div>
           <FormControl className="m-2">
             <FormLabel>Paid Amount</FormLabel>
-            <Typography >{payment.paid_amount} {payment.currency}</Typography>
+            <Typography >{payment.crypto_amount} {payment.crypto_currency}</Typography>
           </FormControl>
           <FormControl className="m-2">
             <FormLabel>Date</FormLabel>
