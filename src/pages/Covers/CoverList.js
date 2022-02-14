@@ -51,7 +51,7 @@ class BasicTable extends React.Component {
 
     componentDidMount() {
 
-        let { q, from, to, product_type, status } = utils.queryToFilter(this.props.location.search);
+        let { q, from, to, product_type, status } = utils.queryToFilter(this.props.location.hash);
 
         if (this.state.status_options.includes(status)) {
             status = this.state.status_options.indexOf(status)
@@ -80,6 +80,10 @@ class BasicTable extends React.Component {
         this.setState({ q: "", total_pages: 0, total_records: 0, current_page: 0, product_type: "" })
     }
 
+    resetPagination = () => {
+        this.setState({ current_page: 0 })
+    }
+
     createRequestObj = () => {
         let req = {
             from: ((this.state.current_page) * this.state.rows_per_page),
@@ -105,7 +109,9 @@ class BasicTable extends React.Component {
             let req = this.createRequestObj()
             
             let query_string = utils.filterToQuery(req);
-            this.props.history.push(`/covers?${query_string}`)
+            if(decodeURIComponent(this.props.location.hash) != `#?${query_string}`){
+                this.props.history.push(`/covers#?${query_string}`)
+            }
 
             let response = await PolicyService.table(req);
 
@@ -137,15 +143,17 @@ class BasicTable extends React.Component {
     }
 
     handleChangeStatus = (event, status) => {
-        this.resetFilter();
+        this.resetPagination();
         this.setState({ status }, this.loadTable)
     }
 
     handleChangeSearch = (e) => {
+        this.resetPagination();
         this.setState({ [e.target.name]: e.target.value }, this.loadTable);
     }
 
     handleChangeDate = (key, date) => {
+        this.resetPagination();
         this.setState({ [key]: date }, this.loadTable);
     }
 
