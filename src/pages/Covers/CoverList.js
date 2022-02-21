@@ -19,7 +19,7 @@ import utils from "../../libs/utils";
 import PolicyService from "../../libs/services/policies";
 import AuthService from "../../libs/services/auth";
 import { PRODUCT_TYPE_NAMES } from "../../libs/constants";
-import { FilterList, Search, Visibility } from "@material-ui/icons";
+import { FilterList, Search, Visibility, FileCopy, OpenInNew } from "@material-ui/icons";
 import { withRouter } from "react-router-dom";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
@@ -263,11 +263,12 @@ class BasicTable extends React.Component {
                         {this.state.status_options.map((status, ind) => (<Tab className="text-capitalize" label={status} key={ind} />))}
                     </Tabs>
                     <TableContainer component={Paper}>
-                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table" className="cover-list-table">
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Product Type</TableCell>
                                     <TableCell>Txn Hash</TableCell>
+                                    {this.state.status_options[this.state.status] === "active" ? <TableCell className="transaction-hash">Etherscan Transaction</TableCell> : <React.Fragment></React.Fragment>}
                                     <TableCell>Name</TableCell>
                                     <TableCell>Email</TableCell>
                                     <TableCell>Status</TableCell>
@@ -282,6 +283,11 @@ class BasicTable extends React.Component {
                                     this.state.rows.map((cover, ind) => (<TableRow key={ind}>
                                         <TableCell >{PRODUCT_TYPE_NAMES[cover.product_type]}</TableCell>
                                         <TableCell > {cover.txn_hash} </TableCell>
+                                        {
+                                            this.state.status_options[this.state.status] === "active" ? 
+                                            <TableCell className="transaction-hash" title={cover.payment_hash}>{cover.payment_hash}</TableCell> : 
+                                            <React.Fragment></React.Fragment>
+                                        }
                                         <TableCell>{cover.user && cover.user.first_name} {cover.user && cover.user.last_name}</TableCell>
                                         <TableCell>{cover.user && cover.user.email}</TableCell>
                                         <TableCell className="text-capitalize">{cover.status}</TableCell>
@@ -295,6 +301,13 @@ class BasicTable extends React.Component {
                                             <Link to={`/covers/show/${cover._id}`}>
                                                 <IconButton> <Visibility /> </IconButton>
                                             </Link>
+                                            {
+                                                this.state.status_options[this.state.status] === "active" ? 
+                                                <a target="_blank" href={cover.transaction_link}>
+                                                    <IconButton> <OpenInNew /> </IconButton>
+                                                </a> : 
+                                                <React.Fragment></React.Fragment>
+                                            }
                                         </TableCell>
                                     </TableRow>)) :
                                     <TableRow>

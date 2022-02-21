@@ -109,4 +109,32 @@
 }
 .button_padding {
     padding-bottom: 29px;
-  }
+}
+.cover-list-table .transaction-hash{
+    max-width: 130px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.copy-hover-area{
+    position: relative;
+}
+
+.copy-hover-area span.copy-icon{
+    opacity: 0;
+    position: absolute;
+    padding-left: 5px;
+    background: white;
+    padding: 0.7px 6px;
+    border-radius: 2px;
+    cursor: pointer;
+    z-index: 99;
+    float: right;
+    right: 0;
+}
+.copy-hover-area:hover .copy-icon{
+    visibility: visible;
+    opacity: 1;
+    transition: 0.3s;
+}
