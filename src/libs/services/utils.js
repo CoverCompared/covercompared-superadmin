@@ -34,8 +34,23 @@ UtilsService.getConstant = (hard = false) => {
     });
 }
 
-UtilsService.dashboard = async () => {
-    const url = `${API_BASE_URL}/admin/dashboard`;
+/**
+ * 
+ * @param {string} url 
+ * @param {Object} queryParams 
+ * @returns 
+ */
+ UtilsService.addQueryParams = (url, queryParams) => {
+    queryParams = _.map(queryParams, (value, key) => {
+        return `${key}=${value}`;
+    })
+    queryParams = Object.values(queryParams).join("&")
+
+    return `${url}?${queryParams}`;
+}
+
+UtilsService.dashboard = async (queryParams = {}) => {
+    const url = UtilsService.addQueryParams(`${API_BASE_URL}/admin/dashboard`, queryParams);
     const res = await axios({ url });
     return res;
 }
